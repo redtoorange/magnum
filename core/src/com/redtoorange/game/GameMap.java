@@ -15,43 +15,50 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
- * GameMap.java - DESCRIPTION
+ * GameMap.java - Encapsulated TiledMap renderer
  *
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-public class GameMap implements Disposable{
+
+//TODO: Detect and populate player spawn points
+//TODO: Add Monster spawners.
+//TODO: Add Item Spawners.
+
+public class GameMap implements Disposable {
     private TiledMapRenderer mapRenderer;
     private TiledMap map;
 
     public Array<Rectangle> walls = new Array<Rectangle>();
     public Array<Rectangle> playerSpawns = new Array<Rectangle>();
 
-    public GameMap(String mapPath, SpriteBatch batch){
-        TmxMapLoader mapLoader = new TmxMapLoader( new InternalFileHandleResolver());
+    public GameMap(String mapPath, SpriteBatch batch) {
+        TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load(mapPath);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f/16f, batch);
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / 16f, batch);
 
         buildWalls();
         buildPlayerSpawns();
     }
 
-    public void render(Camera camera ){
-        mapRenderer.setView( (OrthographicCamera) camera );
+    public void render(Camera camera) {
+        mapRenderer.setView((OrthographicCamera) camera);
         mapRenderer.render();
     }
 
     @Override
     public void dispose() {
-        System.out.println( "GameMap disposed" );
-        if(map != null)
+        if(Global.DEBUG)
+            System.out.println("GameMap disposed");
+
+        if (map != null)
             map.dispose();
     }
 
-    private void buildWalls(){
+    private void buildWalls() {
         Array<RectangleMapObject> rects = map.getLayers().get("walls").getObjects().getByType(RectangleMapObject.class);
-        for(RectangleMapObject r : rects){
+        for (RectangleMapObject r : rects) {
             Rectangle rectangle = r.getRectangle();
 
             Vector2 size = new Vector2();
@@ -60,8 +67,8 @@ public class GameMap implements Disposable{
             rectangle.getSize(size);
             rectangle.getCenter(center);
 
-            size.scl(1/16f);
-            center.scl(1/16f);
+            size.scl(1 / 16f);
+            center.scl(1 / 16f);
 
             rectangle.setSize(size.x, size.y);
             rectangle.setCenter(center.x, center.y);
@@ -70,7 +77,7 @@ public class GameMap implements Disposable{
         }
     }
 
-    private void buildPlayerSpawns(){
+    private void buildPlayerSpawns() {
 
     }
 }

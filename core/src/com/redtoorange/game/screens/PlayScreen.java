@@ -17,6 +17,7 @@ import com.redtoorange.game.*;
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
+//TODO: Move physics to a new Systems. Encapsulate the physics update loop.
 public class PlayScreen extends ScreenAdapter {
     private Core core;
 
@@ -31,7 +32,7 @@ public class PlayScreen extends ScreenAdapter {
     private Box2DDebugRenderer debugRenderer;
     private ContactManager contactManager;
 
-    public PlayScreen( Core core ) {
+    public PlayScreen(Core core) {
         this.core = core;
     }
 
@@ -42,9 +43,9 @@ public class PlayScreen extends ScreenAdapter {
 
     private void init() {
         Gdx.input.setCursorCatched(true);
-        Gdx.input.setCursorPosition( Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
+        Gdx.input.setCursorPosition(Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
 
-        world = new World(new Vector2(0,0), true);
+        world = new World(new Vector2(0, 0), true);
         debugRenderer = new Box2DDebugRenderer();
         contactManager = new ContactManager();
 
@@ -55,18 +56,18 @@ public class PlayScreen extends ScreenAdapter {
         batch = new SpriteBatch();
 
         gameMap = new GameMap("tilemaps/test_map.tmx", batch);
-        player = new Player( camera, world );
+        player = new Player(camera, world);
 
-        for(Rectangle r : gameMap.walls){
+        for (Rectangle r : gameMap.walls) {
             BodyDef bDef = new BodyDef();
 
             Vector2 center = new Vector2();
             r.getCenter(center);
-            bDef.position.set( center );
+            bDef.position.set(center);
             bDef.type = BodyDef.BodyType.StaticBody;
 
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(r.getWidth()/2f, r.getHeight()/2f);
+            shape.setAsBox(r.getWidth() / 2f, r.getHeight() / 2f);
 
             Body body = world.createBody(bDef);
 
@@ -82,7 +83,7 @@ public class PlayScreen extends ScreenAdapter {
         }
     }
 
-    public void draw(){
+    public void draw() {
         camera.update();
         gameMap.render(camera);
 
@@ -93,13 +94,13 @@ public class PlayScreen extends ScreenAdapter {
 
         batch.end();
 
-        debugRenderer.render(world, camera.combined);
+        if(Global.DEBUG)
+            debugRenderer.render(world, camera.combined);
     }
 
-    public void update( float deltaTime ){
+    public void update(float deltaTime) {
         player.update(deltaTime);
         updateCameraPosition();
-
         world.step(deltaTime, 6, 2);
     }
 
@@ -111,23 +112,25 @@ public class PlayScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        System.out.println( "PlayScreen disposed" );
+        if(Global.DEBUG)
+            System.out.println("PlayScreen disposed");
+
         Gdx.input.setCursorCatched(false);
 
-        if(gameMap != null)
+        if (gameMap != null)
             gameMap.dispose();
 
-        if(batch != null)
+        if (batch != null)
             batch.dispose();
 
-        if(player != null)
+        if (player != null)
             player.dispose();
 
-        if(world != null)
+        if (world != null)
             world.dispose();
     }
 
     private void updateCameraPosition() {
-        camera.position.set( player.getPosition3());
+        camera.position.set(player.getPosition3());
     }
 }
