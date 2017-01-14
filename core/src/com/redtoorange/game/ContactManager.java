@@ -2,6 +2,8 @@ package com.redtoorange.game;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.redtoorange.game.entities.Bullet;
+import com.redtoorange.game.entities.Player;
 
 /**
  * ContactManager.java - Handle the contacts between different entities.

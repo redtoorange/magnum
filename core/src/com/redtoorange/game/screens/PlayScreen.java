@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.redtoorange.game.*;
+import com.redtoorange.game.entities.Player;
+import com.redtoorange.game.factories.Box2DFactory;
 
 /**
  * PlayScreen.java - Primary playing screen that the user will interact with.
@@ -17,7 +19,9 @@ import com.redtoorange.game.*;
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
+
 //TODO: Move physics to a new Systems. Encapsulate the physics update loop.
+
 public class PlayScreen extends ScreenAdapter {
     private Core core;
 
@@ -31,6 +35,8 @@ public class PlayScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer debugRenderer;
     private ContactManager contactManager;
+
+    private float cameraSmoothing = 0.1f;
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -55,31 +61,19 @@ public class PlayScreen extends ScreenAdapter {
         viewport = new ExtendViewport(Global.VIRTUAL_WIDTH, Global.VIRTUAL_HEIGHT, camera);
         batch = new SpriteBatch();
 
-        gameMap = new GameMap("tilemaps/test_map.tmx", batch);
+        gameMap = new GameMap("tilemaps/test_map.tmx", batch, 1/16f);
         player = new Player(camera, world);
 
+        initWalls();
+    }
+
+    private void initWalls() {
         for (Rectangle r : gameMap.walls) {
-            BodyDef bDef = new BodyDef();
-
-            Vector2 center = new Vector2();
-            r.getCenter(center);
-            bDef.position.set(center);
-            bDef.type = BodyDef.BodyType.StaticBody;
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(r.getWidth() / 2f, r.getHeight() / 2f);
-
-            Body body = world.createBody(bDef);
-
-            FixtureDef fDef = new FixtureDef();
-            fDef.filter.groupIndex = 1;
-            fDef.density = 1f;
-            fDef.shape = shape;
-
-            body.createFixture(fDef);
-            body.setUserData(r);
-
-            shape.dispose();
+            Filter w = new Filter();
+            w.groupIndex = 1;
+            Body b = Box2DFactory.createStaticBody(world, r);
+            b.getFixtureList().first().setFilterData(w);
+            b.setUserData(r);
         }
     }
 
@@ -104,12 +98,15 @@ public class PlayScreen extends ScreenAdapter {
         world.step(deltaTime, 6, 2);
     }
 
+    private void updateCameraPosition() {
+        camera.position.lerp(player.getPosition3D(), cameraSmoothing);
+    }
+
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
         camera.update();
     }
-
     @Override
     public void dispose() {
         if(Global.DEBUG)
@@ -128,9 +125,5 @@ public class PlayScreen extends ScreenAdapter {
 
         if (world != null)
             world.dispose();
-    }
-
-    private void updateCameraPosition() {
-        camera.position.set(player.getPosition3());
     }
 }

@@ -28,15 +28,18 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameMap implements Disposable {
     private TiledMapRenderer mapRenderer;
     private TiledMap map;
+    private float mapScale = 1f;
 
     public Array<Rectangle> walls = new Array<Rectangle>();
     public Array<Rectangle> playerSpawns = new Array<Rectangle>();
 
-    public GameMap(String mapPath, SpriteBatch batch) {
+    public GameMap(String mapPath, SpriteBatch batch, float mapScale) {
+        this.mapScale = mapScale;
+
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load(mapPath);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(map, 1f / 16f, batch);
+        mapRenderer = new OrthogonalTiledMapRenderer(map, mapScale, batch);
 
         buildWalls();
         buildPlayerSpawns();
@@ -57,8 +60,17 @@ public class GameMap implements Disposable {
     }
 
     private void buildWalls() {
-        Array<RectangleMapObject> rects = map.getLayers().get("walls").getObjects().getByType(RectangleMapObject.class);
-        for (RectangleMapObject r : rects) {
+        Array<RectangleMapObject> wallMapObjects = map.getLayers().get("walls").getObjects().getByType(RectangleMapObject.class);
+        pullAndAddRectangles(wallMapObjects, walls);
+    }
+
+    private void buildPlayerSpawns() {
+        Array<RectangleMapObject> playerspawnMapObjects = map.getLayers().get("playerspawn").getObjects().getByType(RectangleMapObject.class);
+        pullAndAddRectangles(playerspawnMapObjects, playerSpawns);
+    }
+
+    private void pullAndAddRectangles(Array<RectangleMapObject> source, Array<Rectangle> destination){
+        for (RectangleMapObject r : source) {
             Rectangle rectangle = r.getRectangle();
 
             Vector2 size = new Vector2();
@@ -67,17 +79,13 @@ public class GameMap implements Disposable {
             rectangle.getSize(size);
             rectangle.getCenter(center);
 
-            size.scl(1 / 16f);
-            center.scl(1 / 16f);
+            size.scl(mapScale);
+            center.scl(mapScale);
 
             rectangle.setSize(size.x, size.y);
             rectangle.setCenter(center.x, center.y);
 
-            walls.add(rectangle);
+            destination.add(rectangle);
         }
-    }
-
-    private void buildPlayerSpawns() {
-
     }
 }
