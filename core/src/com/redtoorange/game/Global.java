@@ -16,7 +16,7 @@ public class Global {
 
     public static int WINDOW_WIDTH = 1280;
     public static int WINDOW_HEIGHT = 1040;
-    public static String WINDOW_TITLE = "Blue Steel";
+    public static String WINDOW_TITLE = "Tika is the Best!";
 
     public static float VIRTUAL_WIDTH = 15f;
     public static float VIRTUAL_HEIGHT = 15f;
