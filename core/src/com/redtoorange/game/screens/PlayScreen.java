@@ -66,6 +66,8 @@ public class PlayScreen extends ScreenAdapter {
 
         initWalls();
     }
+    
+    
 
     private void initWalls() {
         for (Rectangle r : gameMap.walls) {
