@@ -1,4 +1,4 @@
-package com.redtoorange.game.entities;
+package com.redtoorange.game.entities.characters;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
-import com.redtoorange.game.components.PlayerPhysicsComponent;
-import com.redtoorange.game.components.SpriteComponent;
+import com.redtoorange.game.components.physics.PlayerPhysicsComponent;
+import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -21,23 +21,17 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-//TODO: Implement into ECS format
-//TODO: Pull bullet system out
-//TODO: optimize camera controller
+//TODO: optimize camera character
 public class Player extends Character implements Disposable {
     private Sprite crossHair;
     private Vector3 mousePosition = new Vector3();
-    private Vector2 deltaInput = new Vector2();
+
     private OrthographicCamera camera;    //Reference to the main camera
 
     private PlayerGunComponent gunComponent;
-    //private PlayerPhysicsComponent playerPhysicsComponent;
 
-    private float rotation = 0;
 
     public Player(OrthographicCamera camera, PhysicsSystem physicsSystem) {
-    	super( physicsSystem);
-    	
         this.camera = camera;
         loadAssets();
 
@@ -56,7 +50,7 @@ public class Player extends Character implements Disposable {
         sprite.setSize(1f, 1f);
         sprite.setOriginCenter();
         
-        spriteComponent = new SpriteComponent(sprite);
+        spriteComponent = new SpriteComponent(sprite, this);
 
         Texture cross = new Texture("crosshair.png");
         crossHair = new Sprite(cross);
@@ -71,22 +65,19 @@ public class Player extends Character implements Disposable {
         crossHair.setCenter(mousePosition.x, mousePosition.y);
 
         processInput();
-        rotatePlayer();
+        rotatePlayerToMouseDirection();
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-    	spriteComponent.setCenter(physicsComponent.getBodyPosition());
-    	
-    	
-        crossHair.draw(batch);
+    	crossHair.draw(batch);
         super.draw(batch);
     }
 
     
-    protected void rotatePlayer() {
-        rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
-        spriteComponent.setRotation(rotation);
+    protected void rotatePlayerToMouseDirection() {
+        float rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
+        setRotation(rotation);
     }
 
     protected void processInput() {

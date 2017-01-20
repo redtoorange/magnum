@@ -40,11 +40,11 @@ public abstract class Entity {
         return obj;
     }
 
-    public void addComponent( Component c ){
+    protected void addComponent( Component c ){
         components.add(c);
     }
 
-    public void removeComponent( Component c){
+    protected void removeComponent( Component c){
         components.removeValue(c, true);
     }
     

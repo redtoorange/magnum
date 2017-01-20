@@ -5,11 +5,9 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -18,10 +16,9 @@ import com.redtoorange.game.Core;
 import com.redtoorange.game.GameMap;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Engine;
-import com.redtoorange.game.entities.Player;
+import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.factories.Box2DFactory;
 import com.redtoorange.game.systems.PhysicsSystem;
-import com.redtoorange.game.systems.RenderingSystem;
 
 /**
  * PlayScreen.java - Primary playing screen that the user will interact with.
@@ -42,7 +39,6 @@ public class PlayScreen extends ScreenAdapter {
     private GameMap gameMap;
     private Player player;
 
-    //private World world;
     private Box2DDebugRenderer debugRenderer;
     private ContactManager contactManager;
 
@@ -50,8 +46,6 @@ public class PlayScreen extends ScreenAdapter {
     
     private Engine engine;
     private PhysicsSystem physicsSystem;
-    
-    
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -66,14 +60,10 @@ public class PlayScreen extends ScreenAdapter {
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
 
-        physicsSystem = new PhysicsSystem();
-        
-        //world = new World(new Vector2(0, 0), true);
-        
-        
         debugRenderer = new Box2DDebugRenderer();
         contactManager = new ContactManager();
 
+        physicsSystem = new PhysicsSystem();
         physicsSystem.getWorld().setContactListener(contactManager);
 
         camera = new OrthographicCamera(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);

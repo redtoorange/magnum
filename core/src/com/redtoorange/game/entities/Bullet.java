@@ -3,9 +3,8 @@ package com.redtoorange.game.entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
-import com.redtoorange.game.components.BulletPhysicsComponent;
-import com.redtoorange.game.components.SpriteComponent;
+import com.redtoorange.game.components.physics.BulletPhysicsComponent;
+import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -23,7 +22,7 @@ public class Bullet extends Entity{
     private SpriteComponent spriteComponent;
 
     public Bullet(Sprite sprite, PhysicsSystem physicsSystem) {
-        spriteComponent = new SpriteComponent(sprite);
+        spriteComponent = new SpriteComponent(sprite, this);
         bulletPhysicsComponent = new BulletPhysicsComponent(physicsSystem, this, spriteComponent);
         
         components.add(bulletPhysicsComponent);

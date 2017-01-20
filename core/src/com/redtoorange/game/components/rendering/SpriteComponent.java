@@ -1,11 +1,10 @@
-package com.redtoorange.game.components;
+package com.redtoorange.game.components.rendering;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.redtoorange.game.engine.Drawable;
+import com.redtoorange.game.entities.Entity;
 
 /**
  * SpriteComponent.java - DESCRIPTION
@@ -13,19 +12,21 @@ import com.redtoorange.game.engine.Drawable;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public class SpriteComponent extends Component implements Drawable{
+public class SpriteComponent extends RenderComponent {
 	public static String TAG = SpriteComponent.class.getSimpleName();
 	//public static ComponentType type = new ComponentType();
 	
     private Sprite sprite;
 
     //does a deep copy of the sprite and stores it
-    public SpriteComponent(Sprite sprite) {
+    public SpriteComponent(Sprite sprite, Entity parent) {
+        super(parent);
     	
         this.sprite = new Sprite(sprite);
         sprite.setOriginCenter();
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }

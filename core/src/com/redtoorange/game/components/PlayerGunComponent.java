@@ -6,13 +6,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
-import com.redtoorange.game.entities.Player;
+import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -33,6 +32,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private final Player player;
 
     public PlayerGunComponent(PhysicsSystem physicsSystem, Player player) {
+        super(player);
         this.player = player;
         initBullets(physicsSystem);
     }

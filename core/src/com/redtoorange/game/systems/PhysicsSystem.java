@@ -6,11 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
-import com.redtoorange.game.components.BulletPhysicsComponent;
-import com.redtoorange.game.components.Component;
-import com.redtoorange.game.components.PlayerPhysicsComponent;
 import com.redtoorange.game.engine.Updateable;
-import com.redtoorange.game.entities.Entity;
 
 public class PhysicsSystem extends System implements Updateable, Disposable{
 	private World world;
