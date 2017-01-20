@@ -7,7 +7,7 @@ import com.redtoorange.game.entities.Entity;
  * Component.java - Metaphorical piece of an entity.
  *
  * @author - Andrew M.
- * @version - 14/Jan/2017
+ * @version - 20/Jan/2017
  */
 public abstract class Component implements Disposable{    
     protected Entity parent;
@@ -18,9 +18,5 @@ public abstract class Component implements Disposable{
 
     public Entity getParent(){
         return parent;
-    }
-
-    public void dispose() {
-
     }
 }

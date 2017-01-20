@@ -7,15 +7,11 @@ import com.badlogic.gdx.graphics.FPSLogger;
 import com.redtoorange.game.screens.PlayScreen;
 
 /**
- * Core.java - Core game class that handles the different com.redtoorange.game.screens.
+ * Core.java - Core game class that handles the different screens.
  *
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-
-//TODO: General refactoring.
-//ygoiugbh;uhb
-
 public class Core extends Game {
     private FPSLogger logger = new FPSLogger();
     private PlayScreen playScreen;

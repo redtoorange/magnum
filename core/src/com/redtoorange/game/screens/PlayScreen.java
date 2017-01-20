@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -13,10 +15,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import com.redtoorange.game.ContactManager;
 import com.redtoorange.game.Core;
-import com.redtoorange.game.GameMap;
+import com.redtoorange.game.entities.GameMap;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.entities.characters.Player;
+import com.redtoorange.game.entities.characters.enemies.Enemy;
 import com.redtoorange.game.factories.Box2DFactory;
 import com.redtoorange.game.systems.PhysicsSystem;
 
@@ -26,10 +29,9 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-
-//TODO: Move physics to a new Systems. Encapsulate the physics update loop.
-
 public class PlayScreen extends ScreenAdapter {
+    private static final int ENEMY_COUNT = 5;
+
     private Core core;
 
     private OrthographicCamera camera;
@@ -70,16 +72,20 @@ public class PlayScreen extends ScreenAdapter {
         viewport = new ExtendViewport(Global.VIRTUAL_WIDTH, Global.VIRTUAL_HEIGHT, camera);
         batch = new SpriteBatch();
 
-        gameMap = new GameMap("tilemaps/test_map.tmx", batch, 1/16f);
+        gameMap = new GameMap("tilemaps/test_map.tmx", batch, camera, 1/16f);
         player = new Player(camera, physicsSystem);
 
         initWalls();
         
         engine = new Engine();
+
+        engine.addEntity( gameMap );
         engine.addEntity( player );
+
+        for(int i = 0; i < ENEMY_COUNT; i++){
+            engine.addEntity( new Enemy( physicsSystem, new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), player ) );
+        }
     }
-    
-    
 
     private void initWalls() {
         for (Rectangle r : gameMap.walls) {
@@ -90,19 +96,23 @@ public class PlayScreen extends ScreenAdapter {
             b.setUserData(r);
         }
     }
-    
+
+    /**
+     *
+     * @param deltaTime
+     */
     public void update(float deltaTime) {
     	physicsSystem.update(deltaTime);
-    	
     	engine.update(deltaTime);
-    	
         updateCameraPosition();
     }
-    
 
+
+    /**
+     *
+     */
     public void draw() {
         camera.update();
-        gameMap.render(camera);
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
@@ -142,5 +152,8 @@ public class PlayScreen extends ScreenAdapter {
 
         if (physicsSystem != null)
         	physicsSystem.dispose();
+
+        if(engine != null)
+            engine.dispose();
     }
 }

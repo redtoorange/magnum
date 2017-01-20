@@ -2,6 +2,7 @@ package com.redtoorange.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.components.Component;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.engine.Updateable;
@@ -12,7 +13,7 @@ import com.redtoorange.game.engine.Updateable;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public abstract class Entity {
+public abstract class Entity implements Disposable{
     protected Array<Component> components = new Array<Component>();
 
     public void update(float deltaTime){

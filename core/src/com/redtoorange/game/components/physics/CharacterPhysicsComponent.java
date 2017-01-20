@@ -40,13 +40,19 @@ public class CharacterPhysicsComponent extends PhysicsComponent implements Updat
     }
 
     protected void initPhysics(PhysicsSystem physicsSystem) {
-        body = Box2DFactory.createBody(physicsSystem, character.getSpriteComponent().getBoudningBox(), BodyDef.BodyType.DynamicBody,
+        body = Box2DFactory.createBody(physicsSystem, character.getSpriteComponent().getBoundingBox(), BodyDef.BodyType.DynamicBody,
                 density, 0f, 0f, false, false );
 
-        body.setUserData(this);
+        body.setUserData(character);
+
         body.setFixedRotation(true);
         body.setLinearDamping(linearDampening);
         body.setAngularDamping(angularDampening);
         body.setSleepingAllowed(false);
+    }
+
+    @Override
+    public void dispose( ) {
+        //nothing really
     }
 }

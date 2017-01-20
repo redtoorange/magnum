@@ -20,7 +20,7 @@ public class BulletPhysicsComponent extends PhysicsComponent {
 
         this.speed = 10f;
 
-        Rectangle bounding = new Rectangle(sc.getBoudningBox());
+        Rectangle bounding = new Rectangle(sc.getBoundingBox());
         bounding.setSize(sc.getWidth()/4f, sc.getHeight() / 4f);
 
         body = Box2DFactory.createBody(physicsSystem, bounding, BodyDef.BodyType.DynamicBody, 0, 0, 0, true, true);
@@ -35,5 +35,10 @@ public class BulletPhysicsComponent extends PhysicsComponent {
 
     public Vector2 getBodyPosition(){
         return body.getPosition();
+    }
+
+    @Override
+    public void dispose( ) {
+        //nothing here
     }
 }

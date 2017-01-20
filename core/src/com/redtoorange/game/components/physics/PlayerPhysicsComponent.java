@@ -15,8 +15,4 @@ public class PlayerPhysicsComponent extends CharacterPhysicsComponent {
     	super(physicsSystem, player, 10f, 10f, 10f,
                 5f);
     }
-
-    public void update(float deltaTime) {
-        super.update(deltaTime);
-    }
 }

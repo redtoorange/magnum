@@ -12,12 +12,22 @@ import com.badlogic.gdx.math.Vector2;
  */
 //TODO: Create a different class for the functions?
 public class Global {
-	
+
+	/**
+	 * Bit signature for a failed Array operation.
+	 */
 	public static final int FAILURE = -2;
+	/**
+	 * Bit signature for an Array push when the pushed object is already present.
+	 */
 	public static final int PRESENT = -1;
+	/**
+	 * Bit signature for an Array operation that was successful.
+	 */
 	public static final int SUCCESS = 0;
-	
-	
+	/**
+	 * Should the game run in Debug mode.  Provides additional output and physics debug information.
+	 */
     public static boolean DEBUG = true;
 
     public static int WINDOW_WIDTH = 1280;
@@ -29,13 +39,22 @@ public class Global {
 
     public static short BULLET_COL_GROUP = -1;
 
-    public static void clearScreen() {
+	/**
+	 * Call to the OpenGL JNI to set the clear color and clear the screen.
+	 */
+	public static void clearScreen() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
+	/**
+	 * Helper function to translate one Vector2 to look at another Vector2.
+	 * @param source		The starting position of the Vector2, the one that will be rotated.
+	 * @param destination	The point the source should be looking at.
+	 * @return				The angle (in degrees) that the source needs to rotate for it to be pointing at the destination.
+	 */
     public static float lookAt(Vector2 source, Vector2 destination) {
         double angleRad = Math.atan2((destination.y - source.y), (destination.x - source.x));
-        return (float) ((180f / Math.PI) * angleRad);
+        return (float) (Math.toDegrees(angleRad));
     }
 }

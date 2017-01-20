@@ -1,4 +1,4 @@
-package com.redtoorange.game;
+package com.redtoorange.game.entities;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
@@ -13,50 +13,66 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.redtoorange.game.Global;
+import com.redtoorange.game.components.Component;
+import com.redtoorange.game.components.rendering.MapRenderComponent;
 
-/**
- * GameMap.java - Encapsulated TiledMap renderer
- *
- * @author - Andrew M.
- * @version - 13/Jan/2017
- */
 
 //TODO: Detect and populate player spawn points
 //TODO: Add Monster spawners.
 //TODO: Add Item Spawners.
 
-public class GameMap implements Disposable {
-    private TiledMapRenderer mapRenderer;
+/**
+ * GameMap.java - Encapsulated TiledMap renderer. Scaling is handled automatically.  Two Arrays will be
+ * pulled for object layers name: "walls", "playerspawn".
+ *
+ * @author - Andrew M.
+ * @version - 13/Jan/2017
+ */
+public class GameMap extends Entity implements Disposable {
     private TiledMap map;
     private float mapScale = 1f;
 
+	/**
+	 * Parsed from the TMX map and scale by the map scale.  "walls" must be the layer name.
+	 */
     public Array<Rectangle> walls = new Array<Rectangle>();
-    public Array<Rectangle> playerSpawns = new Array<Rectangle>();
+	/**
+	 * Parsed from the TMX map and scaled by the map scale.  "playerspawns" must be the layer name.
+	 */
+	public Array<Rectangle> playerSpawns = new Array<Rectangle>();
 
-    public GameMap(String mapPath, SpriteBatch batch, float mapScale) {
+	/**
+	 * Build a GameMap that will encapsulate a Tiled TMX Map.  Scaling is handled automatically.  Two Arrays will be
+	 * pulled from the TMX Map for object layers name: "walls", "playerspawn".
+	 *
+	 * @param mapPath	the complete path from the Asset folder for the TMX file.
+	 * @param batch		The SpriteBatch to embed into the MapRenderer.
+	 * @param mapScale	The amount to resize the entire map by.  1/16f if you want 16 map pixels to equal 1 game unit.
+	 */
+    public GameMap(String mapPath, SpriteBatch batch, OrthographicCamera camera, float mapScale) {
         this.mapScale = mapScale;
 
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load(mapPath);
 
-        mapRenderer = new OrthogonalTiledMapRenderer(map, mapScale, batch);
+
+		addComponent( new MapRenderComponent( this, map, mapScale, batch, camera ) );
 
         buildWalls();
         buildPlayerSpawns();
     }
 
-    public void render(Camera camera) {
-        mapRenderer.setView((OrthographicCamera) camera);
-        mapRenderer.render();
-    }
-
-    @Override
+	@Override
     public void dispose() {
-        if(Global.DEBUG)
+        if( Global.DEBUG)
             System.out.println("GameMap disposed");
 
         if (map != null)
             map.dispose();
+
+		for( Component c : components)
+			c.dispose();
     }
 
     private void buildWalls() {

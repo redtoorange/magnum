@@ -3,24 +3,22 @@ package com.redtoorange.game.entities.characters;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Disposable;
-import com.redtoorange.game.Global;
 import com.redtoorange.game.components.physics.CharacterPhysicsComponent;
+import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.entities.Entity;
 import com.redtoorange.game.systems.PhysicsSystem;
 
-public class Character extends Entity implements Disposable{
+public abstract class Character extends Entity {
     protected CharacterPhysicsComponent physicsComponent;
     protected SpriteComponent spriteComponent;
 
+    protected PhysicsSystem physicsSystem;
+
 	protected Vector2 deltaInput = new Vector2();
 
-    public Character(){
-
-    }
-
-    public Character( PhysicsSystem physicsSystem ) {
+    public Character(PhysicsSystem physicsSystem){
+        this.physicsSystem = physicsSystem;
     }
 
     public void update(float deltaTime) {
@@ -48,6 +46,10 @@ public class Character extends Entity implements Disposable{
         return spriteComponent;
     }
 
+    public PhysicsComponent getPhysicsComponent(){
+        return physicsComponent;
+    }
+
     protected void setRotation(float rotation){
         spriteComponent.setRotation(rotation);
     }
@@ -61,11 +63,10 @@ public class Character extends Entity implements Disposable{
     }
 
     @Override
-    public void dispose() {
-        if(Global.DEBUG)
-            System.out.println("Player disposed");
-
-        if (spriteComponent != null)
+    public void dispose( ) {
+        if(physicsComponent != null)
+            physicsComponent.dispose();
+        if(spriteComponent != null)
             spriteComponent.dispose();
     }
 }

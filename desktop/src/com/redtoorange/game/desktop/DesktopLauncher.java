@@ -6,13 +6,13 @@ import com.redtoorange.game.Core;
 import com.redtoorange.game.Global;
 
 /**
- * DesktopLauncher.java - Basic Windows window handler.  Launches a new copy of Core.
+ * DesktopLauncher.java - Basic Windows window handler.  Launches a new copy of Core. Program entry point.
  *
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-
 public class DesktopLauncher {
+
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 

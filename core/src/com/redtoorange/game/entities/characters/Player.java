@@ -27,11 +27,11 @@ public class Player extends Character implements Disposable {
     private Vector3 mousePosition = new Vector3();
 
     private OrthographicCamera camera;    //Reference to the main camera
-
     private PlayerGunComponent gunComponent;
 
-
     public Player(OrthographicCamera camera, PhysicsSystem physicsSystem) {
+        super(physicsSystem);
+
         this.camera = camera;
         loadAssets();
 
@@ -106,5 +106,13 @@ public class Player extends Character implements Disposable {
 
     public Vector3 getMousePosition(){
         return mousePosition;
+    }
+
+    @Override
+    public void dispose( ) {
+        super.dispose( );
+
+        if(gunComponent != null)
+            gunComponent.dispose();
     }
 }

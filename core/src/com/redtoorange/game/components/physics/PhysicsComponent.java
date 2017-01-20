@@ -12,7 +12,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author - Andrew M.
  * @version - 20/Jan/2017
  */
-public class PhysicsComponent extends Component {
+public abstract class PhysicsComponent extends Component {
     protected Body body;
     protected PhysicsSystem physicsSystem;
 

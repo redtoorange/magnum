@@ -61,4 +61,10 @@ public class Bullet extends Entity{
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
+
+    @Override
+    public void dispose( ) {
+        spriteComponent.dispose();
+        bulletPhysicsComponent.dispose();
+    }
 }

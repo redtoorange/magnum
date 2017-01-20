@@ -7,18 +7,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.redtoorange.game.entities.Entity;
 
 /**
- * SpriteComponent.java - DESCRIPTION
+ * SpriteComponent.java - A Render Component that encapsulates a Sprite to allow easy movement and boudning
+ * calculations.
  *
  * @author - Andrew M.
- * @version - 14/Jan/2017
+ * @version - 20/Jan/2017
  */
 public class SpriteComponent extends RenderComponent {
 	public static String TAG = SpriteComponent.class.getSimpleName();
-	//public static ComponentType type = new ComponentType();
-	
     private Sprite sprite;
 
-    //does a deep copy of the sprite and stores it
+    /**
+     * A clone of this is stored inside the component.
+     * @param sprite    Sprite that should be cloned.
+     * @param parent    The parent entity.
+     */
     public SpriteComponent(Sprite sprite, Entity parent) {
         super(parent);
     	
@@ -35,14 +38,26 @@ public class SpriteComponent extends RenderComponent {
         return sprite;
     }
 
+    /**
+     * Set the Sprite's rotation in degrees.
+     * @param rotation  the degree representation the Sprite should be set to
+     */
     public void setRotation( float rotation ){
         sprite.setRotation(rotation);
     }
 
+    /**
+     * Get the Sprite's current rotation value.
+     * @return  A float representing the rotation of the sprite in degrees
+     */
     public float getRotation(){
         return sprite.getRotation();
     }
 
+    /**
+     * Set the center of the Sprite, this does NOT set the upper left position like a normal position.set()
+     * @param center    Where the center of the sprite should be draw.
+     */
     public void setCenter(Vector2 center){
         sprite.setCenter(center.x, center.y);
     }
@@ -55,7 +70,10 @@ public class SpriteComponent extends RenderComponent {
         sprite.setCenter(getCenterX(), y);
     }
 
-
+    /**
+     * Helper method to allow the grabbing of a new Vector2 reference to the center of the Sprite.
+     * @return The Center of the Sprite
+     */
     public Vector2 getCenter( ){
         return new Vector2(getCenterX(), getCenterY());
     }
@@ -68,7 +86,11 @@ public class SpriteComponent extends RenderComponent {
         return (sprite.getY() + (sprite.getHeight()/2f));
     }
 
-    public Rectangle getBoudningBox(){
+    /**
+     * Wrapper for the Sprite getBoundingRectangle() method.
+     * @return  The smallest possible rectangle that will fit around the Sprite Image.
+     */
+    public Rectangle getBoundingBox(){
         return sprite.getBoundingRectangle();
     }
 
@@ -78,5 +100,10 @@ public class SpriteComponent extends RenderComponent {
 
     public float getHeight(){
         return sprite.getHeight();
+    }
+
+    @Override
+    public void dispose( ) {
+        //Nothing to dispose here
     }
 }

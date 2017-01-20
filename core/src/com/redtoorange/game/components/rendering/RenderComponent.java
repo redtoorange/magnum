@@ -11,13 +11,8 @@ import com.redtoorange.game.entities.Entity;
  * @author - Andrew M.
  * @version - 20/Jan/2017
  */
-public class RenderComponent extends Component implements Drawable {
+public abstract class RenderComponent extends Component implements Drawable {
     public RenderComponent(Entity parent) {
         super(parent);
-    }
-
-    @Override
-    public void draw(SpriteBatch batch) {
-
     }
 }
