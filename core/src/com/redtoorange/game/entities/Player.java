@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
@@ -32,7 +31,7 @@ public class Player extends Character implements Disposable {
     private OrthographicCamera camera;    //Reference to the main camera
 
     private PlayerGunComponent gunComponent;
-    private PlayerPhysicsComponent physicsComponent;
+    //private PlayerPhysicsComponent playerPhysicsComponent;
 
     private float rotation = 0;
 
