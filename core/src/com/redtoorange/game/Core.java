@@ -14,6 +14,7 @@ import com.redtoorange.game.screens.PlayScreen;
  */
 
 //TODO: General refactoring.
+//
 
 public class Core extends Game {
     private FPSLogger logger = new FPSLogger();
