@@ -73,7 +73,12 @@ public class PlayScreen extends ScreenAdapter {
         batch = new SpriteBatch();
 
         gameMap = new GameMap("tilemaps/test_map.tmx", batch, camera, 1/16f);
-        player = new Player(camera, physicsSystem);
+
+        Vector2 playerSpawn = new Vector2( );
+        gameMap.playerSpawns.first().getCenter( playerSpawn );
+
+        player = new Player(camera, physicsSystem, playerSpawn);
+        System.out.println( playerSpawn );
 
         initWalls();
         

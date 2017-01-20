@@ -38,7 +38,7 @@ public class Enemy extends Character {
     }
 
     protected Sprite loadEnemySprite( Vector2 position ){
-        Texture temp = new Texture("player.png");
+        Texture temp = new Texture("zombie.png");
 
         Sprite sprite = new Sprite(temp);
         sprite.setPosition(position.x, position.y);
@@ -57,8 +57,6 @@ public class Enemy extends Character {
     public void update( float deltaTime ) {
         super.update( deltaTime );
 
-        System.out.println( spriteComponent.getCenter() );
-
         calculateDeltaInput();
         rotateToFacePlayer();
     }
@@ -70,6 +68,22 @@ public class Enemy extends Character {
 
     protected void calculateDeltaInput(){
         //TODO: figure out how to rotate this around to face player
-        deltaInput.set( 0, 0 );
+        deltaInput.set( 1, 0 );
+        deltaInput.rotate( getRotation() );
+    }
+
+    @Override
+    public void takeDamage( int amount ) {
+        super.takeDamage( amount );
+
+        spriteComponent.setColor( ((float)health/ (float) maxHealth), 0, 0, 1 );
+    }
+
+    @Override
+    protected void die( ) {
+        removeComponent( spriteComponent );
+        removeComponent( physicsComponent );
+
+        physicsComponent.destroy();
     }
 }

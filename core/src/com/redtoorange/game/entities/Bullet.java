@@ -36,7 +36,7 @@ public class Bullet extends Entity{
         if (alive) {
             lifeTime += deltaTime;
             if (lifeTime >= maxLife) {
-                alive = false;
+                kill();
             }
         }
     }
@@ -58,8 +58,13 @@ public class Bullet extends Entity{
         lifeTime = 0.0f;
     }
 
-    public void setAlive(boolean alive) {
-        this.alive = alive;
+    public void kill(){
+        this.alive = false;
+        bulletPhysicsComponent.killVelocity();
+    }
+
+    public boolean isAlive(){
+        return alive;
     }
 
     @Override

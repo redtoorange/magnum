@@ -23,11 +23,13 @@ import com.redtoorange.game.systems.PhysicsSystem;
 public class PlayerGunComponent extends Component implements Updateable, Drawable {
     private Texture bulletTexture;
     private Array<Bullet> bulletController = new Array<Bullet>();
+
     private int bulletIndex = 0;
     private final int MAX_BULLETS = 25;
     private float timeTillFire = 0.0f;
-    private float coolDown = 0.05f;
+    private float coolDown = 0.25f;
     private boolean fireBullet = false;
+    private float speed = 5f;
 
     private final Player player;
 
@@ -86,6 +88,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
         Vector2 velocity = new Vector2( player.getMousePosition().x - bulletPosition.x,
                                         player.getMousePosition().y - bulletPosition.y).nor();
+        velocity.scl( speed );
 
         b.fire(bulletPosition, velocity, player.getRotation());
     }

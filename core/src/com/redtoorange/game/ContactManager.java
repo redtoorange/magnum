@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.redtoorange.game.entities.Bullet;
 import com.redtoorange.game.entities.characters.Player;
+import com.redtoorange.game.entities.characters.enemies.Enemy;
 
 /**
  * ContactManager.java - Handle the contacts between different entities.
@@ -19,20 +20,32 @@ public class ContactManager implements ContactListener {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
 
-        if ((bodyA.getUserData() instanceof Player && bodyB.getUserData() instanceof Bullet) ||
-                (bodyB.getUserData() instanceof Player && bodyA.getUserData() instanceof Bullet)) {
+        if ((bodyA.getUserData() instanceof Enemy && bodyB.getUserData() instanceof Bullet) ||
+                (bodyB.getUserData() instanceof Enemy && bodyA.getUserData() instanceof Bullet)) {
             if(Global.DEBUG)
-                System.out.println("bullet hit player");
+                System.out.println("bullet hit enemy");
+
+            if (bodyA.getUserData() instanceof Bullet) {
+                Bullet b =  ((Bullet) bodyA.getUserData());
+                if(b.isAlive()){
+                    b.kill();
+                    ((Enemy)bodyB.getUserData()).takeDamage(1);
+                }
+            } else {
+                Bullet b =  ((Bullet) bodyB.getUserData());
+                if(b.isAlive()){
+                    b.kill();
+                    ((Enemy)bodyA.getUserData()).takeDamage(1);
+                }
+            }
         }
 
         if ((bodyA.getUserData() instanceof Bullet && bodyB.getUserData() instanceof Rectangle) ||
                 (bodyB.getUserData() instanceof Bullet && bodyA.getUserData() instanceof Rectangle)) {
-            if(Global.DEBUG)
-                System.out.println("bullet hit wall");
             if (bodyA.getUserData() instanceof Bullet) {
-                ((Bullet) bodyA.getUserData()).setAlive(false);
+                ((Bullet) bodyA.getUserData()).kill();
             } else {
-                ((Bullet) bodyB.getUserData()).setAlive(false);
+                ((Bullet) bodyB.getUserData()).kill();
             }
         }
     }

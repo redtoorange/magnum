@@ -17,6 +17,9 @@ public abstract class Character extends Entity {
 
 	protected Vector2 deltaInput = new Vector2();
 
+    protected int maxHealth = 10;
+    protected int health = maxHealth;
+
     public Character(PhysicsSystem physicsSystem){
         this.physicsSystem = physicsSystem;
     }
@@ -69,4 +72,13 @@ public abstract class Character extends Entity {
         if(spriteComponent != null)
             spriteComponent.dispose();
     }
+
+    public void takeDamage( int amount ){
+        health -= amount;
+        if(health <= 0){
+            die();
+        }
+    }
+
+    protected abstract void die();
 }

@@ -29,11 +29,11 @@ public class Player extends Character implements Disposable {
     private OrthographicCamera camera;    //Reference to the main camera
     private PlayerGunComponent gunComponent;
 
-    public Player(OrthographicCamera camera, PhysicsSystem physicsSystem) {
+    public Player(OrthographicCamera camera, PhysicsSystem physicsSystem, Vector2 spawnPoint) {
         super(physicsSystem);
 
         this.camera = camera;
-        loadAssets();
+        loadAssets( spawnPoint );
 
         gunComponent = new PlayerGunComponent(physicsSystem, this);
         physicsComponent = new PlayerPhysicsComponent(physicsSystem, this);
@@ -43,10 +43,11 @@ public class Player extends Character implements Disposable {
         addComponent(spriteComponent);
     }
 
-    protected void loadAssets() {
+    protected void loadAssets(Vector2 spawnPoint ) {
         Texture temp = new Texture("player.png");
+
         Sprite sprite = new Sprite(temp);
-        sprite.setPosition(3f, 3f);
+        sprite.setPosition(spawnPoint.x, spawnPoint.y);
         sprite.setSize(1f, 1f);
         sprite.setOriginCenter();
         
@@ -76,8 +77,10 @@ public class Player extends Character implements Disposable {
 
     
     protected void rotatePlayerToMouseDirection() {
-        float rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
-        setRotation(rotation);
+        if(spriteComponent != null){
+            float rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
+            setRotation(rotation);
+        }
     }
 
     protected void processInput() {
@@ -114,5 +117,11 @@ public class Player extends Character implements Disposable {
 
         if(gunComponent != null)
             gunComponent.dispose();
+    }
+
+    @Override
+    protected void die( ) {
+        removeComponent( spriteComponent );
+        removeComponent( physicsComponent );
     }
 }

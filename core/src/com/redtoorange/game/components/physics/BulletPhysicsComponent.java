@@ -41,4 +41,8 @@ public class BulletPhysicsComponent extends PhysicsComponent {
     public void dispose( ) {
         //nothing here
     }
+
+    public void killVelocity(){
+        body.setLinearVelocity( 0f, 0f );
+    }
 }

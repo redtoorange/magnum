@@ -1,5 +1,6 @@
 package com.redtoorange.game.components.rendering;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -27,6 +28,10 @@ public class SpriteComponent extends RenderComponent {
     	
         this.sprite = new Sprite(sprite);
         sprite.setOriginCenter();
+    }
+
+    public void setColor(float r, float g, float b, float a){
+        sprite.setColor( new Color( r, g, b, a ) );
     }
 
     @Override

@@ -45,4 +45,11 @@ public abstract class PhysicsComponent extends Component {
 
         return position;
     }
+
+    public void destroy(){
+        if(body != null && physicsSystem != null) {
+            physicsSystem.destroyBody( body );
+            body = null;
+        }
+    }
 }
