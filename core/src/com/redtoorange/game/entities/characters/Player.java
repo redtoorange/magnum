@@ -9,10 +9,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
 import com.redtoorange.game.components.physics.PlayerPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
+import com.redtoorange.game.screens.PlayScreen;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -29,13 +31,13 @@ public class Player extends Character implements Disposable {
     private OrthographicCamera camera;    //Reference to the main camera
     private PlayerGunComponent gunComponent;
 
-    public Player(OrthographicCamera camera, PhysicsSystem physicsSystem, Vector2 spawnPoint) {
+    public Player( OrthographicCamera camera, PlayScreen playScreen, PhysicsSystem physicsSystem, Vector2 spawnPoint) {
         super(physicsSystem);
 
         this.camera = camera;
         loadAssets( spawnPoint );
 
-        gunComponent = new PlayerGunComponent(physicsSystem, this);
+        gunComponent = new PlayerGunComponent(physicsSystem, this, playScreen);
         physicsComponent = new PlayerPhysicsComponent(physicsSystem, this);
         
         addComponent(physicsComponent);

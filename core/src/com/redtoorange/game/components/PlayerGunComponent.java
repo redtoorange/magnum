@@ -6,12 +6,17 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
 import com.redtoorange.game.entities.characters.Player;
+import com.redtoorange.game.screens.PlayScreen;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -31,12 +36,25 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private boolean fireBullet = false;
     private float speed = 5f;
 
-    private final Player player;
+    private int maxBulletsInGun = 6;
+    private int bulletsInGun = maxBulletsInGun;
 
-    public PlayerGunComponent(PhysicsSystem physicsSystem, Player player) {
+    private Texture[] bulletTextures = new Texture[maxBulletsInGun + 1];
+
+    private boolean needsReload = false;
+
+    private final Player player;
+    private PlayScreen playScreen;
+
+    public PlayerGunComponent( PhysicsSystem physicsSystem, Player player, PlayScreen playScreen) {
         super(player);
+        this.playScreen = playScreen;
         this.player = player;
         initBullets(physicsSystem);
+
+        for(int i = 0; i <= maxBulletsInGun; i++){
+            bulletTextures[i] = new Texture( "weapons/revolver/revolver_" + i + ".png" );
+        }
     }
 
     public void update(float deltaTime) {
@@ -52,11 +70,29 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && timeTillFire <= 0f) {
             fireBullet = true;
         }
+
+        if (Gdx.input.isKeyJustPressed( Input.Keys.R) ) {
+            bulletsInGun = maxBulletsInGun;
+            playScreen.swapCurrentImage( bulletTextures[maxBulletsInGun] );
+            needsReload = false;
+        }
     }
 
     private void updateBullets(float deltaTime) {
-        if (fireBullet)
-            fireBullet();
+        if (fireBullet && !needsReload) {
+            bulletsInGun--;
+            playScreen.swapCurrentImage( bulletTextures[bulletsInGun] );
+
+            if(bulletsInGun <= 0) {
+                needsReload = true;
+            }
+
+            fireBullet( );
+        }
+        else if(fireBullet && needsReload){
+            System.out.println( "Out of bullets, need to reload!" );
+            fireBullet = false;
+        }
 
 
         for (Bullet b : bulletController) {
@@ -106,6 +142,9 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
     @Override
     public void dispose() {
+        for(Texture t : bulletTextures){
+            t.dispose();
+        }
         if(Global.DEBUG)
             System.out.println("GunComponent disposed");
 

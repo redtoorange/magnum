@@ -3,16 +3,23 @@ package com.redtoorange.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import com.kotcrab.vis.ui.VisUI;
 import com.redtoorange.game.ContactManager;
 import com.redtoorange.game.Core;
 import com.redtoorange.game.entities.GameMap;
@@ -49,6 +56,13 @@ public class PlayScreen extends ScreenAdapter {
     private Engine engine;
     private PhysicsSystem physicsSystem;
 
+    private OrthographicCamera uiCamera;
+    private Viewport uiViewport;
+    private Table rootTable;
+    private Stage uiStage;
+    private Image currentImage;
+    private TextureRegionDrawable regionDrawable = new TextureRegionDrawable( new TextureRegion( new Texture( "bullet.png" ) ) );
+
     public PlayScreen(Core core) {
         this.core = core;
     }
@@ -59,6 +73,7 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     private void init() {
+        VisUI.load( );
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
 
@@ -77,7 +92,7 @@ public class PlayScreen extends ScreenAdapter {
         Vector2 playerSpawn = new Vector2( );
         gameMap.playerSpawns.first().getCenter( playerSpawn );
 
-        player = new Player(camera, physicsSystem, playerSpawn);
+        player = new Player(camera, this, physicsSystem, playerSpawn);
         System.out.println( playerSpawn );
 
         initWalls();
@@ -90,6 +105,19 @@ public class PlayScreen extends ScreenAdapter {
         for(int i = 0; i < ENEMY_COUNT; i++){
             engine.addEntity( new Enemy( physicsSystem, new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), player ) );
         }
+
+        uiCamera = new OrthographicCamera(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
+        uiViewport = new ExtendViewport(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, uiCamera);
+
+        uiStage = new Stage( uiViewport );
+        rootTable = new Table( VisUI.getSkin() );
+        uiStage.addActor( rootTable );
+        rootTable.setFillParent( true );
+
+        rootTable.add( "Hi There" ).right().bottom().size( 100f, 100f ).expand();
+        currentImage = new Image( regionDrawable );
+        rootTable.add( currentImage ).bottom().right().size( 100f, 100f );
+
     }
 
     private void initWalls() {
@@ -109,6 +137,7 @@ public class PlayScreen extends ScreenAdapter {
     public void update(float deltaTime) {
     	physicsSystem.update(deltaTime);
     	engine.update(deltaTime);
+        uiStage.act( deltaTime );
         updateCameraPosition();
     }
 
@@ -126,6 +155,8 @@ public class PlayScreen extends ScreenAdapter {
 
         batch.end();
 
+        uiCamera.update();
+        uiStage.draw();
         if(Global.DEBUG)
             debugRenderer.render(physicsSystem.getWorld(), camera.combined);
     }
@@ -137,7 +168,9 @@ public class PlayScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
+        uiViewport.update( width, height );
         camera.update();
+        uiCamera.update();
     }
     @Override
     public void dispose() {
@@ -160,5 +193,10 @@ public class PlayScreen extends ScreenAdapter {
 
         if(engine != null)
             engine.dispose();
+    }
+
+    public void swapCurrentImage(Texture texture){
+        regionDrawable.getRegion().setTexture( texture );
+        //currentImage.setDrawable( new TextureRegionDrawable(  new TextureRegion( texture) ) );
     }
 }
