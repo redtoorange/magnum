@@ -9,8 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.redtoorange.game.Global;
+import com.redtoorange.game.engine.Drawable;
+import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
 import com.redtoorange.game.entities.Player;
+import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
  * PlayerGunComponent.java - DESCRIPTION
@@ -18,29 +21,27 @@ import com.redtoorange.game.entities.Player;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public class PlayerGunComponent extends Component {
+public class PlayerGunComponent extends Component implements Updateable, Drawable {
     private Texture bulletTexture;
     private Array<Bullet> bulletController = new Array<Bullet>();
     private int bulletIndex = 0;
-    private final int MAX_BULLETS = 15;
+    private final int MAX_BULLETS = 25;
     private float timeTillFire = 0.0f;
     private float coolDown = 0.05f;
     private boolean fireBullet = false;
 
     private final Player player;
 
-    public PlayerGunComponent(World world, Player player) {
+    public PlayerGunComponent(PhysicsSystem physicsSystem, Player player) {
         this.player = player;
-        initBullets(world);
+        initBullets(physicsSystem);
     }
 
-    @Override
     public void update(float deltaTime) {
         processInput();
         updateBullets(deltaTime);
     }
 
-    @Override
     public void draw(SpriteBatch batch) {
         drawBullets(batch);
     }
@@ -80,8 +81,7 @@ public class PlayerGunComponent extends Component {
         if (bulletIndex == MAX_BULLETS)
             bulletIndex = 0;
 
-        Vector2 bulletPosition = new Vector2();
-        player.getPlayerSprite().getBoundingRectangle().getCenter(bulletPosition);
+        Vector2 bulletPosition = player.getSpriteComponent().getCenter();
         bulletPosition.add(new Vector2(0.35f, -0.3f).rotate(player.getRotation()));
 
         Vector2 velocity = new Vector2( player.getMousePosition().x - bulletPosition.x,
@@ -90,14 +90,14 @@ public class PlayerGunComponent extends Component {
         b.fire(bulletPosition, velocity, player.getRotation());
     }
 
-    private void initBullets(World world) {
+    private void initBullets(PhysicsSystem physicsSystem) {
         bulletTexture = new Texture("bullet.png");
         Sprite bulletSprite = new Sprite(bulletTexture);
         bulletSprite.setSize(1f, 1f);
         bulletSprite.setOriginCenter();
 
         for (int i = 0; i < MAX_BULLETS; i++) {
-            bulletController.add(new Bullet(new Sprite(bulletSprite), world));
+            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem));
         }
     }
 

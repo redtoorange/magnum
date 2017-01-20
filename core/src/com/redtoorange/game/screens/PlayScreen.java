@@ -6,12 +6,22 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.redtoorange.game.*;
+
+import com.redtoorange.game.ContactManager;
+import com.redtoorange.game.Core;
+import com.redtoorange.game.GameMap;
+import com.redtoorange.game.Global;
+import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.entities.Player;
 import com.redtoorange.game.factories.Box2DFactory;
+import com.redtoorange.game.systems.PhysicsSystem;
+import com.redtoorange.game.systems.RenderingSystem;
 
 /**
  * PlayScreen.java - Primary playing screen that the user will interact with.
@@ -32,11 +42,16 @@ public class PlayScreen extends ScreenAdapter {
     private GameMap gameMap;
     private Player player;
 
-    private World world;
+    //private World world;
     private Box2DDebugRenderer debugRenderer;
     private ContactManager contactManager;
 
     private float cameraSmoothing = 0.1f;
+    
+    private Engine engine;
+    private PhysicsSystem physicsSystem;
+    
+    
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -51,20 +66,27 @@ public class PlayScreen extends ScreenAdapter {
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
 
-        world = new World(new Vector2(0, 0), true);
+        physicsSystem = new PhysicsSystem();
+        
+        //world = new World(new Vector2(0, 0), true);
+        
+        
         debugRenderer = new Box2DDebugRenderer();
         contactManager = new ContactManager();
 
-        world.setContactListener(contactManager);
+        physicsSystem.getWorld().setContactListener(contactManager);
 
         camera = new OrthographicCamera(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
         viewport = new ExtendViewport(Global.VIRTUAL_WIDTH, Global.VIRTUAL_HEIGHT, camera);
         batch = new SpriteBatch();
 
         gameMap = new GameMap("tilemaps/test_map.tmx", batch, 1/16f);
-        player = new Player(camera, world);
+        player = new Player(camera, physicsSystem);
 
         initWalls();
+        
+        engine = new Engine();
+        engine.addEntity( player );
     }
     
     
@@ -73,11 +95,20 @@ public class PlayScreen extends ScreenAdapter {
         for (Rectangle r : gameMap.walls) {
             Filter w = new Filter();
             w.groupIndex = 1;
-            Body b = Box2DFactory.createStaticBody(world, r);
+            Body b = Box2DFactory.createStaticBody(physicsSystem, r);
             b.getFixtureList().first().setFilterData(w);
             b.setUserData(r);
         }
     }
+    
+    public void update(float deltaTime) {
+    	physicsSystem.update(deltaTime);
+    	
+    	engine.update(deltaTime);
+    	
+        updateCameraPosition();
+    }
+    
 
     public void draw() {
         camera.update();
@@ -86,18 +117,12 @@ public class PlayScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        player.draw(batch);
+        engine.render(batch);
 
         batch.end();
 
         if(Global.DEBUG)
-            debugRenderer.render(world, camera.combined);
-    }
-
-    public void update(float deltaTime) {
-        player.update(deltaTime);
-        updateCameraPosition();
-        world.step(deltaTime, 6, 2);
+            debugRenderer.render(physicsSystem.getWorld(), camera.combined);
     }
 
     private void updateCameraPosition() {
@@ -125,7 +150,7 @@ public class PlayScreen extends ScreenAdapter {
         if (player != null)
             player.dispose();
 
-        if (world != null)
-            world.dispose();
+        if (physicsSystem != null)
+        	physicsSystem.dispose();
     }
 }

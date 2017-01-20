@@ -12,11 +12,17 @@ import com.badlogic.gdx.math.Vector2;
  */
 //TODO: Create a different class for the functions?
 public class Global {
+	
+	public static final int FAILURE = -2;
+	public static final int PRESENT = -1;
+	public static final int SUCCESS = 0;
+	
+	
     public static boolean DEBUG = true;
 
     public static int WINDOW_WIDTH = 1280;
     public static int WINDOW_HEIGHT = 1040;
-    public static String WINDOW_TITLE = "Tika is the Best!";
+    public static String WINDOW_TITLE = "Some cool game thing";
 
     public static float VIRTUAL_WIDTH = 15f;
     public static float VIRTUAL_HEIGHT = 15f;

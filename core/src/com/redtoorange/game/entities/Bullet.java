@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.redtoorange.game.components.BulletPhysicsComponent;
 import com.redtoorange.game.components.SpriteComponent;
+import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
  * Bullet.java - Basic bullet class.  Will be initialized in an Array and spawned/reset as needed (pooled for efficiency).
@@ -21,12 +22,18 @@ public class Bullet extends Entity{
     private BulletPhysicsComponent bulletPhysicsComponent;
     private SpriteComponent spriteComponent;
 
-    public Bullet(Sprite sprite, World world) {
+    public Bullet(Sprite sprite, PhysicsSystem physicsSystem) {
         spriteComponent = new SpriteComponent(sprite);
-        bulletPhysicsComponent = new BulletPhysicsComponent(world, this, spriteComponent);
+        bulletPhysicsComponent = new BulletPhysicsComponent(physicsSystem, this, spriteComponent);
+        
+        components.add(bulletPhysicsComponent);
+        components.add(spriteComponent);
     }
 
+    @Override
     public void update(float deltaTime) {
+    	super.update(deltaTime);
+    	
         if (alive) {
             lifeTime += deltaTime;
             if (lifeTime >= maxLife) {
@@ -38,7 +45,7 @@ public class Bullet extends Entity{
     public void draw(SpriteBatch batch) {
         if (alive) {
             spriteComponent.setCenter(bulletPhysicsComponent.getBodyPosition());
-            spriteComponent.draw(batch);
+            super.draw(batch);
         }
     }
 

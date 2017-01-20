@@ -2,6 +2,7 @@ package com.redtoorange.game.factories;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
+import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
  * Box2DFactory.java - Construct Boc2D bodies of common types.
@@ -10,14 +11,14 @@ import com.badlogic.gdx.physics.box2d.*;
  * @version - 14/Jan/2017
  */
 public class Box2DFactory {
-    public static Body createStaticBody(World world, Rectangle rect){
+    public static Body createStaticBody(PhysicsSystem physicsSystem, Rectangle rect){
 
-        return createBody(world, rect, BodyDef.BodyType.StaticBody,
+        return createBody(physicsSystem, rect, BodyDef.BodyType.StaticBody,
                 1, 0, 0,
                 false, false);
     }
 
-    public static Body createBody(World world, Rectangle rect, BodyDef.BodyType type,
+    public static Body createBody(PhysicsSystem physicsSystem, Rectangle rect, BodyDef.BodyType type,
                                   float density, float friction, float restitution,
                                   boolean isSensor, boolean isBullet){
         BodyDef bDef = new BodyDef();
@@ -35,7 +36,7 @@ public class Box2DFactory {
         fDef.density = density;
         fDef.isSensor = isSensor;
 
-        Body body = world.createBody(bDef);
+        Body body = physicsSystem.createBody(bDef);
         body.createFixture(fDef);
 
         shape.dispose();

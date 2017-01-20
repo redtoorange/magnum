@@ -1,6 +1,5 @@
 package com.redtoorange.game.components;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -9,8 +8,6 @@ import com.badlogic.gdx.utils.Disposable;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public abstract class Component implements Disposable{
-    public void update(float deltaTime){}
-    public void draw(SpriteBatch batch){}
+public abstract class Component implements Disposable{    
     public void dispose() {}
 }

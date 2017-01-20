@@ -48,19 +48,17 @@ public class Core extends Game {
             logger.log();
 
         update();
+        
         draw();
     }
 
     public void update() {
         playScreen.update(Gdx.graphics.getDeltaTime());
     }
-    
-    private void doNothing(){
-    	//This method does nothing
-    }
 
     public void draw() {
         Global.clearScreen();
+        
         playScreen.draw();
     }
 

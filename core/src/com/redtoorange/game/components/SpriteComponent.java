@@ -1,9 +1,11 @@
 package com.redtoorange.game.components;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.redtoorange.game.engine.Drawable;
 
 /**
  * SpriteComponent.java - DESCRIPTION
@@ -11,16 +13,19 @@ import com.badlogic.gdx.math.Vector2;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public class SpriteComponent extends Component {
+public class SpriteComponent extends Component implements Drawable{
+	public static String TAG = SpriteComponent.class.getSimpleName();
+	//public static ComponentType type = new ComponentType();
+	
     private Sprite sprite;
 
     //does a deep copy of the sprite and stores it
     public SpriteComponent(Sprite sprite) {
+    	
         this.sprite = new Sprite(sprite);
         sprite.setOriginCenter();
     }
 
-    @Override
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }

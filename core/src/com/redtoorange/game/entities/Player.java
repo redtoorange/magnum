@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
 import com.redtoorange.game.components.PlayerPhysicsComponent;
+import com.redtoorange.game.components.SpriteComponent;
+import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
  * Player.java - Generic player class.
@@ -23,8 +25,7 @@ import com.redtoorange.game.components.PlayerPhysicsComponent;
 //TODO: Implement into ECS format
 //TODO: Pull bullet system out
 //TODO: optimize camera controller
-public class Player extends Entity implements Disposable {
-    private Sprite playerSprite;
+public class Player extends Character implements Disposable {
     private Sprite crossHair;
     private Vector3 mousePosition = new Vector3();
     private Vector2 deltaInput = new Vector2();
@@ -35,20 +36,28 @@ public class Player extends Entity implements Disposable {
 
     private float rotation = 0;
 
-    public Player(OrthographicCamera camera, World world) {
+    public Player(OrthographicCamera camera, PhysicsSystem physicsSystem) {
+    	super( physicsSystem);
+    	
         this.camera = camera;
         loadAssets();
 
-        gunComponent = new PlayerGunComponent(world, this);
-        physicsComponent = new PlayerPhysicsComponent(world, this);
+        gunComponent = new PlayerGunComponent(physicsSystem, this);
+        physicsComponent = new PlayerPhysicsComponent(physicsSystem, this);
+        
+        addComponent(physicsComponent);
+        addComponent(gunComponent);
+        addComponent(spriteComponent);
     }
 
-    private void loadAssets() {
+    protected void loadAssets() {
         Texture temp = new Texture("player.png");
-        playerSprite = new Sprite(temp);
-        playerSprite.setPosition(3f, 3f);
-        playerSprite.setSize(1f, 1f);
-        playerSprite.setOriginCenter();
+        Sprite sprite = new Sprite(temp);
+        sprite.setPosition(3f, 3f);
+        sprite.setSize(1f, 1f);
+        sprite.setOriginCenter();
+        
+        spriteComponent = new SpriteComponent(sprite);
 
         Texture cross = new Texture("crosshair.png");
         crossHair = new Sprite(cross);
@@ -57,32 +66,31 @@ public class Player extends Entity implements Disposable {
     }
 
     public void update(float deltaTime) {
+    	super.update(deltaTime);
+    	
         mousePosition = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f));
         crossHair.setCenter(mousePosition.x, mousePosition.y);
 
         processInput();
         rotatePlayer();
-
-        physicsComponent.update(deltaTime);
-        gunComponent.update(deltaTime);
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
-        playerSprite.setCenter(physicsComponent.getBodyPosition().x, physicsComponent.getBodyPosition().y);
-        playerSprite.draw(batch);
+    	spriteComponent.setCenter(physicsComponent.getBodyPosition());
+    	
+    	
         crossHair.draw(batch);
-
-        physicsComponent.draw(batch);
-        gunComponent.draw(batch);
+        super.draw(batch);
     }
 
-    private void rotatePlayer() {
-        rotation = Global.lookAt(   new Vector2(playerSprite.getX() + (playerSprite.getWidth() / 2f), playerSprite.getY() + (playerSprite.getHeight()/2f)),
-                                    new Vector2(mousePosition.x, mousePosition.y));
-        playerSprite.setRotation(rotation);
+    
+    protected void rotatePlayer() {
+        rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
+        spriteComponent.setRotation(rotation);
     }
 
-    private void processInput() {
+    protected void processInput() {
         deltaInput.set(0, 0);
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -106,37 +114,7 @@ public class Player extends Entity implements Disposable {
         }
     }
 
-
-    public Vector2 getPosition2D() {
-        return new Vector2(playerSprite.getX() + (playerSprite.getWidth() / 2f), playerSprite.getY() + (playerSprite.getHeight() / 2f));
-    }
-
-    public Vector3 getPosition3D() {
-        return new Vector3(playerSprite.getX() + (playerSprite.getWidth() / 2f), playerSprite.getY() + (playerSprite.getHeight() / 2f), 0);
-    }
-
-    @Override
-    public void dispose() {
-        if(Global.DEBUG)
-            System.out.println("Player disposed");
-
-        if (playerSprite != null)
-            playerSprite.getTexture().dispose();
-    }
-
-    public Sprite getPlayerSprite(){
-        return playerSprite;
-    }
-
     public Vector3 getMousePosition(){
         return mousePosition;
-    }
-
-    public float getRotation(){
-        return rotation;
-    }
-
-    public Vector2 getDeltaInput(){
-        return deltaInput;
     }
 }
