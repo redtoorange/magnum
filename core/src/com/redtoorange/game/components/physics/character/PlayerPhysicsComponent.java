@@ -11,7 +11,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  */
 public class PlayerPhysicsComponent extends CharacterPhysicsComponent {
     public PlayerPhysicsComponent(PhysicsSystem physicsSystem, Player player) {
-    	super(physicsSystem, player, 10f, 10f, 10f,
+    	super(physicsSystem, player, 5f, 10f, 10f,
                 5f);
     }
 }

@@ -3,7 +3,10 @@ package com.redtoorange.game;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.redtoorange.game.entities.Bullet;
+
+import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
+import com.redtoorange.game.entities.powerups.PowerUp;
 
 /**
  * ContactManager.java - Handle the contacts between different entities.
@@ -18,6 +21,17 @@ public class ContactManager implements ContactListener {
     public void beginContact(Contact contact) {
         Body bodyA = contact.getFixtureA().getBody();
         Body bodyB = contact.getFixtureB().getBody();
+
+        if ((bodyA.getUserData() instanceof PowerUp && bodyB.getUserData() instanceof Player) ||
+                (bodyB.getUserData() instanceof PowerUp && bodyA.getUserData() instanceof Player)) {
+
+            if (bodyA.getUserData() instanceof PowerUp) {
+                ((PowerUp) bodyA.getUserData()).absorbed( ((Player)bodyB.getUserData()) );
+
+            } else {
+                ((PowerUp) bodyB.getUserData()).absorbed( ((Player)bodyA.getUserData()) );
+            }
+        }
 
         if ((bodyA.getUserData() instanceof Enemy && bodyB.getUserData() instanceof Bullet) ||
                 (bodyB.getUserData() instanceof Enemy && bodyA.getUserData() instanceof Bullet)) {

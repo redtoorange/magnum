@@ -5,20 +5,22 @@ import com.badlogic.gdx.math.Vector3;
 import com.redtoorange.game.components.physics.character.CharacterPhysicsComponent;
 import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
+import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.entities.Entity;
 import com.redtoorange.game.systems.PhysicsSystem;
 
-public abstract class Character extends Entity {
-    protected CharacterPhysicsComponent physicsComponent;
-    protected SpriteComponent spriteComponent;
+public abstract class EntityCharacter extends Entity {
+    protected CharacterPhysicsComponent physicsComponent = null;
+    protected SpriteComponent spriteComponent = null;
+
     protected PhysicsSystem physicsSystem;
 	protected Vector2 deltaInput = new Vector2();
 
     protected int maxHealth = 10;
     protected int health = maxHealth;
 
-    public Character(Vector2 position, PhysicsSystem physicsSystem){
-        super(position);
+    public EntityCharacter( Vector2 position, Engine engine, PhysicsSystem physicsSystem){
+        super(position, engine);
         this.physicsSystem = physicsSystem;
     }
 
@@ -48,10 +50,7 @@ public abstract class Character extends Entity {
 
     @Override
     public void dispose( ) {
-        if(physicsComponent != null)
-            physicsComponent.dispose();
-        if(spriteComponent != null)
-            spriteComponent.dispose();
+        super.dispose();
     }
 
     public void takeDamage( int amount ){

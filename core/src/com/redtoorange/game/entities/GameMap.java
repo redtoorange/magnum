@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Array;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.Component;
 import com.redtoorange.game.components.rendering.MapRenderComponent;
+import com.redtoorange.game.engine.Engine;
 
 
 //TODO: Detect and populate player spawn points
@@ -46,8 +47,8 @@ public class GameMap extends Entity {
 	 * @param batch		The SpriteBatch to embed into the MapRenderer.
 	 * @param mapScale	The amount to resize the entire map by.  1/16f if you want 16 map pixels to equal 1 game unit.
 	 */
-    public GameMap(String mapPath, SpriteBatch batch, OrthographicCamera camera, float mapScale) {
-        super(new Vector2(0, 0));
+    public GameMap( String mapPath, Engine engine, SpriteBatch batch, OrthographicCamera camera, float mapScale) {
+        super(new Vector2(0, 0), engine);
         this.mapScale = mapScale;
 
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
@@ -61,14 +62,10 @@ public class GameMap extends Entity {
 
 	@Override
     public void dispose() {
-        if( Global.DEBUG)
-            System.out.println("GameMap disposed");
-
         if (map != null)
             map.dispose();
 
-		for( Component c : components)
-			c.dispose();
+		super.dispose();
     }
 
     private void buildWalls() {

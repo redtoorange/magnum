@@ -10,11 +10,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Drawable;
+import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
 import com.redtoorange.game.entities.characters.Player;
+import com.redtoorange.game.entities.powerups.GunType;
+import com.redtoorange.game.entities.powerups.Inventory;
 import com.redtoorange.game.screens.PlayScreen;
 import com.redtoorange.game.systems.PhysicsSystem;
+import com.redtoorange.game.systems.SoundManager;
 
 /**
  * PlayerGunComponent.java - DESCRIPTION
@@ -23,15 +27,18 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 14/Jan/2017
  */
 public class PlayerGunComponent extends Component implements Updateable, Drawable {
+    private final GunType type = GunType.REVOLVER;
+    private Inventory playerInventory;
+
     private Texture bulletTexture;
     private Array<Bullet> bulletController = new Array<Bullet>();
 
     private int bulletIndex = 0;
-    private final int MAX_BULLETS = 1000;
+    private final int MAX_BULLETS = 6;
     private float timeTillFire = 0.0f;
-    private float coolDown = 0.01f;
+    private float coolDown = .25f;
     private boolean fireBullet = false;
-    private float speed = 2f;
+    private float speed = 5f;
 
     private int maxBulletsInGun = 6;
     private int bulletsInGun = maxBulletsInGun;
@@ -43,11 +50,14 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private final Player player;
     private PlayScreen playScreen;
 
-    public PlayerGunComponent( PhysicsSystem physicsSystem, Player player, PlayScreen playScreen) {
+    public PlayerGunComponent( PhysicsSystem physicsSystem, Engine engine, Player player, PlayScreen playScreen) {
         super(player);
+
         this.playScreen = playScreen;
         this.player = player;
-        initBullets(physicsSystem);
+        playerInventory = player.getInventoy();
+
+        initBullets(physicsSystem, engine);
 
         for(int i = 0; i <= maxBulletsInGun; i++){
             bulletTextures[i] = new TextureRegion( new Texture( "weapons/revolver/revolver_" + i + ".png" ) );
@@ -71,25 +81,24 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         }
 
         if (Gdx.input.isKeyJustPressed( Input.Keys.R) ) {
-            bulletsInGun = maxBulletsInGun;
-            playScreen.getGunUI().swapCurrentImage( bulletTextures[maxBulletsInGun] );
-            needsReload = false;
+            reload();
         }
     }
 
     private void updateBullets(float deltaTime) {
         if (fireBullet && !needsReload) {
+            SoundManager.S.playSound( SoundManager.SoundType.GUNSHOT );
             bulletsInGun--;
-            //playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
+            playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
 
             if(bulletsInGun <= 0) {
-                //needsReload = true;
+                needsReload = true;
             }
 
             fireBullet( );
         }
         else if(fireBullet && needsReload){
-            System.out.println( "Out of bullets, need to reload!" );
+            SoundManager.S.playSound( SoundManager.SoundType.NOBULLETS );
             fireBullet = false;
         }
 
@@ -100,6 +109,22 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
         if (timeTillFire >= 0f) {
             timeTillFire -= deltaTime;
+        }
+    }
+
+    private void reload(){
+        if(bulletsInGun > 0){
+            playerInventory.pickup( type, bulletsInGun );
+        }
+        int bullets = Math.min(maxBulletsInGun, playerInventory.remaining( type ) );
+        playerInventory.consume( type, bullets );
+        bulletsInGun = bullets;
+
+        playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
+
+        if(bulletsInGun > 0) {
+            SoundManager.S.playSound( SoundManager.SoundType.RELOADED );
+            needsReload = false;
         }
     }
 
@@ -128,14 +153,14 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         b.fire(bulletPosition, velocity, player.getRotation());
     }
 
-    private void initBullets(PhysicsSystem physicsSystem) {
+    private void initBullets(PhysicsSystem physicsSystem, Engine engine) {
         bulletTexture = new Texture("bullet.png");
         Sprite bulletSprite = new Sprite(bulletTexture);
         bulletSprite.setSize(1f, 1f);
         bulletSprite.setOriginCenter();
 
         for (int i = 0; i < MAX_BULLETS; i++) {
-            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem, new Vector2(-1000, -1000), speed));
+            bulletController.add(new Bullet(new Sprite(bulletSprite), engine, physicsSystem, new Vector2(-1000, -1000), speed));
         }
     }
 

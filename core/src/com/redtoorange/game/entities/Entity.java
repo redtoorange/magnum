@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.components.Component;
 import com.redtoorange.game.engine.Drawable;
+import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.engine.Updateable;
 
 /**
@@ -17,9 +18,11 @@ import com.redtoorange.game.engine.Updateable;
 public abstract class Entity implements Disposable{
     protected Array<Component> components = new Array<Component>();
     public Vector2 position = new Vector2(0, 0);
+	protected Engine engine;
 
-    public Entity(Vector2 position){
+    public Entity(Vector2 position, Engine engine){
         this.position.set(position);
+		this.engine = engine;
     }
 
     public Vector2 getPosition(){
@@ -66,4 +69,18 @@ public abstract class Entity implements Disposable{
     public Array<Component> getComponents(){
     	return components;
     }
+
+    public Engine getEngine(){
+		return engine;
+	}
+
+	@Override
+	public void dispose( ) {
+		for( Component c : components)
+			c.dispose();
+		components.clear();
+
+		if(engine != null )
+			engine.removeEntity( this );
+	}
 }

@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.redtoorange.game.components.physics.BulletPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
+import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.systems.PhysicsSystem;
+import com.redtoorange.game.systems.SoundManager;
 
 /**
  * Bullet.java - Basic bullet class.  Will be initialized in an Array and spawned/reset as needed (pooled for efficiency).
@@ -21,8 +23,8 @@ public class Bullet extends Entity{
     protected BulletPhysicsComponent bulletPhysicsComponent;
     protected SpriteComponent spriteComponent;
 
-    public Bullet(Sprite sprite, PhysicsSystem physicsSystem, Vector2 position, float speed) {
-        super(position);
+    public Bullet( Sprite sprite, Engine engine, PhysicsSystem physicsSystem, Vector2 position, float speed) {
+        super(position, engine);
 
         this.speed = speed;
         spriteComponent = new SpriteComponent(sprite, this);
@@ -60,6 +62,7 @@ public class Bullet extends Entity{
     }
 
     public void kill(){
+        SoundManager.S.playSound( SoundManager.SoundType.BULLETHIT );
         this.alive = false;
         lifeTime = 0.0f;
         bulletPhysicsComponent.kill();
@@ -71,8 +74,12 @@ public class Bullet extends Entity{
 
     @Override
     public void dispose( ) {
-        spriteComponent.dispose();
-        bulletPhysicsComponent.dispose();
+        if(engine != null)
+            engine.removeEntity( this );
+        if(spriteComponent != null)
+            spriteComponent.dispose();
+        if(bulletPhysicsComponent != null)
+            bulletPhysicsComponent.dispose();
     }
 
     public float getSpeed(){

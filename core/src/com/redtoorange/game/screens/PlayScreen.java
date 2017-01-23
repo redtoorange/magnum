@@ -11,20 +11,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.redtoorange.game.ContactManager;
 import com.redtoorange.game.Core;
 import com.redtoorange.game.Global;
+import com.redtoorange.game.PerformanceCounter;
 import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.entities.GameMap;
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
+import com.redtoorange.game.entities.powerups.Ammo;
 import com.redtoorange.game.factories.Box2DFactory;
 import com.redtoorange.game.systems.GunUI;
 import com.redtoorange.game.systems.PhysicsSystem;
@@ -73,6 +72,7 @@ public class PlayScreen extends ScreenAdapter {
 
         debugRenderer = new Box2DDebugRenderer();
         contactManager = new ContactManager();
+        engine = new Engine();
 
         gunui = new GunUI();
         physicsSystem = new PhysicsSystem();
@@ -82,21 +82,27 @@ public class PlayScreen extends ScreenAdapter {
         viewport = new ExtendViewport(Global.VIRTUAL_WIDTH, Global.VIRTUAL_HEIGHT, camera);
         batch = new SpriteBatch();
 
-        gameMap = new GameMap("tilemaps/test_map.tmx", batch, camera, 1/16f);
+        gameMap = new GameMap("tilemaps/test_map.tmx", null, batch, camera, 1/16f);
 
         Vector2 playerSpawn = new Vector2( );
         gameMap.playerSpawns.first().getCenter( playerSpawn );
 
-        player = new Player(camera, this, physicsSystem, playerSpawn);
+        player = new Player(engine, camera, this, physicsSystem, playerSpawn);
         System.out.println( playerSpawn );
 
         initWalls();
         
-        engine = new Engine();
+
 
         for(int i = 0; i < ENEMY_COUNT; i++){
-            engine.addEntity( new Enemy( physicsSystem, new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), player ) );
+            engine.addEntity( new Enemy( physicsSystem, engine, new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), player ) );
         }
+
+        for(int i = 0; i < ENEMY_COUNT; i++){
+            engine.addEntity( new Ammo( new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), engine, physicsSystem ) );
+        }
+
+
         engine.addEntity( player );
 
     }
@@ -111,11 +117,13 @@ public class PlayScreen extends ScreenAdapter {
         }
     }
 
+    private PerformanceCounter updateCounter = new PerformanceCounter( "Update:" );
     /**
      *
      * @param deltaTime
      */
     public void update(float deltaTime) {
+        updateCounter.start();
     	physicsSystem.update(deltaTime);
 
     	engine.update(deltaTime);
@@ -123,13 +131,18 @@ public class PlayScreen extends ScreenAdapter {
         gunui.update( deltaTime );
 
         updateCameraPosition();
+
+        //System.out.println( updateCounter );
     }
 
 
+    private PerformanceCounter drawCounter = new PerformanceCounter( "Draw:" );
     /**
      *
      */
     public void draw() {
+        drawCounter.start();
+
         camera.update();
 
         gameMap.draw( batch );
@@ -140,9 +153,12 @@ public class PlayScreen extends ScreenAdapter {
         batch.end();
 
         gunui.draw( batch );
+        //System.out.println( drawCounter );
 
         if(Global.DEBUG)
             debugRenderer.render(physicsSystem.getWorld(), camera.combined);
+
+        //System.out.println( drawCounter );
     }
 
     private void updateCameraPosition() {

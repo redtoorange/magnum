@@ -37,7 +37,7 @@ public class BulletPhysicsComponent extends PhysicsComponent implements Updateab
 
     @Override
     public void dispose( ) {
-        //nothing here
+        destroy();
     }
 
     public void kill(){

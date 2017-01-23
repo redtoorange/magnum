@@ -64,7 +64,6 @@ public class Global {
 	 * @return				The angle (in degrees) that the source needs to rotate for it to be pointing at the destination.
 	 */
     public static float lookAt(Vector2 source, Vector2 destination) {
-        double angleRad = Math.atan2((destination.y - source.y), (destination.x - source.x));
-        return (float) (Math.toDegrees(angleRad));
+        return (float) (Math.toDegrees(Math.atan2((destination.y - source.y), (destination.x - source.x))));
     }
 }

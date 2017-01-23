@@ -6,21 +6,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.physics.character.EnemyPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
-import com.redtoorange.game.entities.characters.Character;
+import com.redtoorange.game.engine.Engine;
+import com.redtoorange.game.entities.characters.EntityCharacter;
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.systems.PhysicsSystem;
 
-public class Enemy extends Character {
+public class Enemy extends EntityCharacter {
     protected Player player;
 
-    public Enemy(PhysicsSystem physicsSystem, Vector2 spawnPosition, Player player) {
-        this(physicsSystem, spawnPosition);
+    public Enemy(PhysicsSystem physicsSystem, Engine engine, Vector2 spawnPosition, Player player) {
+        this(physicsSystem, engine, spawnPosition);
 
         this.player = player;
     }
 
-    public Enemy(PhysicsSystem physicsSystem, Vector2 spawnPosition ) {
-        super(spawnPosition, physicsSystem);
+    public Enemy( PhysicsSystem physicsSystem, Engine engine, Vector2 spawnPosition ) {
+        super(spawnPosition, engine, physicsSystem);
 
         spriteComponent = new SpriteComponent( loadEnemySprite(), this );
         physicsComponent = new EnemyPhysicsComponent( physicsSystem, this );
@@ -70,9 +71,6 @@ public class Enemy extends Character {
 
     @Override
     protected void die( ) {
-        removeComponent( spriteComponent );
-        removeComponent( physicsComponent );
-
-        physicsComponent.destroy();
+        dispose();
     }
 }
