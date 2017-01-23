@@ -55,7 +55,6 @@ public class Core extends Game {
 
     public void draw() {
         Global.clearScreen();
-        
         playScreen.draw();
     }
 

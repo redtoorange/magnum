@@ -17,13 +17,14 @@ public class Bullet extends Entity{
     protected float lifeTime = 0.0f;
     protected float maxLife = 5.0f;
     protected boolean alive = false;
-
+    protected float speed;
     protected BulletPhysicsComponent bulletPhysicsComponent;
     protected SpriteComponent spriteComponent;
 
-    public Bullet(Sprite sprite, PhysicsSystem physicsSystem, Vector2 position) {
+    public Bullet(Sprite sprite, PhysicsSystem physicsSystem, Vector2 position, float speed) {
         super(position);
 
+        this.speed = speed;
         spriteComponent = new SpriteComponent(sprite, this);
         bulletPhysicsComponent = new BulletPhysicsComponent(physicsSystem, this, spriteComponent);
         
@@ -50,18 +51,18 @@ public class Bullet extends Entity{
     }
 
     public void fire(Vector2 position, Vector2 velocity, float rotation) {
+        alive = true;
+
         spriteComponent.setCenter(position);
         spriteComponent.setRotation(rotation);
 
         bulletPhysicsComponent.fire(position, velocity, rotation);
-
-        alive = true;
     }
 
     public void kill(){
         this.alive = false;
         lifeTime = 0.0f;
-        bulletPhysicsComponent.killVelocity();
+        bulletPhysicsComponent.kill();
     }
 
     public boolean isAlive(){
@@ -72,5 +73,9 @@ public class Bullet extends Entity{
     public void dispose( ) {
         spriteComponent.dispose();
         bulletPhysicsComponent.dispose();
+    }
+
+    public float getSpeed(){
+        return speed;
     }
 }

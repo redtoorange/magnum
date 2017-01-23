@@ -16,21 +16,22 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 14/Jan/2017
  */
 public class BulletPhysicsComponent extends PhysicsComponent implements Updateable {
+    private Rectangle bounding;
+    private float speed;
+
     public BulletPhysicsComponent(PhysicsSystem physicsSystem, Bullet bullet, SpriteComponent sc) {
         super(physicsSystem, bullet);
 
-        this.speed = 10f;
-
-        Rectangle bounding = new Rectangle(sc.getBoundingBox());
+        this.speed = bullet.getSpeed();
+        bounding = new Rectangle(sc.getBoundingBox());
         bounding.setSize(sc.getWidth()/4f, sc.getHeight() / 4f);
-
-        body = Box2DFactory.createBody(physicsSystem, bounding, BodyDef.BodyType.DynamicBody, 0, 0, 0, true, true);
-        body.setUserData(parent);
     }
 
     public void fire(Vector2 position, Vector2 velocity, float rotation){
+        body = Box2DFactory.createBody(physicsSystem, bounding, BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, true);
+
+        body.setUserData(parent);
         body.setTransform(position, (float) Math.toRadians(rotation));
-        body.setLinearVelocity(0, 0);
         body.applyLinearImpulse(velocity.scl(speed), body.getWorldCenter(), true);
     }
 
@@ -39,8 +40,9 @@ public class BulletPhysicsComponent extends PhysicsComponent implements Updateab
         //nothing here
     }
 
-    public void killVelocity(){
-        body.setLinearVelocity( 0f, 0f );
+    public void kill(){
+        physicsSystem.destroyBody( body );
+        body = null;
     }
 
     @Override

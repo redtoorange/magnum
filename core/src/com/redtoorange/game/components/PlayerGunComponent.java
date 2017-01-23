@@ -27,11 +27,11 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private Array<Bullet> bulletController = new Array<Bullet>();
 
     private int bulletIndex = 0;
-    private final int MAX_BULLETS = 25;
+    private final int MAX_BULLETS = 1000;
     private float timeTillFire = 0.0f;
-    private float coolDown = 0.25f;
+    private float coolDown = 0.01f;
     private boolean fireBullet = false;
-    private float speed = 5f;
+    private float speed = 2f;
 
     private int maxBulletsInGun = 6;
     private int bulletsInGun = maxBulletsInGun;
@@ -53,7 +53,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
             bulletTextures[i] = new TextureRegion( new Texture( "weapons/revolver/revolver_" + i + ".png" ) );
         }
 
-        playScreen.swapCurrentImage( bulletTextures[maxBulletsInGun] );
+        playScreen.getGunUI().swapCurrentImage( bulletTextures[maxBulletsInGun] );
     }
 
     public void update(float deltaTime) {
@@ -72,7 +72,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
         if (Gdx.input.isKeyJustPressed( Input.Keys.R) ) {
             bulletsInGun = maxBulletsInGun;
-            playScreen.swapCurrentImage( bulletTextures[maxBulletsInGun] );
+            playScreen.getGunUI().swapCurrentImage( bulletTextures[maxBulletsInGun] );
             needsReload = false;
         }
     }
@@ -80,10 +80,10 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private void updateBullets(float deltaTime) {
         if (fireBullet && !needsReload) {
             bulletsInGun--;
-            playScreen.swapCurrentImage( bulletTextures[bulletsInGun] );
+            //playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
 
             if(bulletsInGun <= 0) {
-                needsReload = true;
+                //needsReload = true;
             }
 
             fireBullet( );
@@ -135,7 +135,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         bulletSprite.setOriginCenter();
 
         for (int i = 0; i < MAX_BULLETS; i++) {
-            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem, new Vector2(-1000, -1000)));
+            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem, new Vector2(-1000, -1000), speed));
         }
     }
 

@@ -1,7 +1,5 @@
-package com.redtoorange.game.components.physics;
+package com.redtoorange.game.components.physics.character;
 
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.redtoorange.game.Global;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
 import com.redtoorange.game.systems.PhysicsSystem;
 
@@ -12,7 +10,6 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version 20/Jan/2017
  */
 public class EnemyPhysicsComponent extends CharacterPhysicsComponent{
-
 	public EnemyPhysicsComponent( PhysicsSystem physicsSystem, Enemy enemy) {
 		super(physicsSystem, enemy, 1f, 10f, 10f, 5f);
 	}

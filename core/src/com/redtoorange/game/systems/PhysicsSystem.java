@@ -20,6 +20,9 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 	private boolean cullBodies = false;
 	private Array<Body> deadBodies = new Array<Body>();
 
+	private boolean createBodies = false;
+	private Array<BodyDef> newBodies = new Array<BodyDef>();
+
 	/**
 	 * Create a new Box2D World with no gravity.
 	 */
@@ -49,12 +52,15 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 		
 		if(cullBodies)
 			destroyBodies();
+		if(createBodies)
+			spawnBodies();
 	}
 	
 	/**
 	 * Helper function to prevent hanging bodies in the world.
 	 */
 	private void destroyBodies(){
+		cullBodies = false;
 		for(int i = deadBodies.size-1; i >= 0; i--){
 			if(deadBodies.get(i) != null)
 				world.destroyBody( deadBodies.get(i) );
@@ -82,6 +88,16 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 		return world.createBody(bDef);
 	}
 
+	public void spawnBodies(){
+		createBodies = false;
+		for(int i = newBodies.size-1; i >= 0; i--){
+			if(newBodies.get(i) != null)
+				world.createBody( newBodies.get(i) );
+
+			newBodies.removeIndex(i);
+		}
+	}
+
 	/**
 	 * Get a reference to the World.
 	 * @return a reference to the World.  This will allow you to alter the World.
@@ -95,6 +111,4 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 		if(world != null)
 			world.dispose();
 	}
-	
-	
 }

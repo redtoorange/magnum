@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.redtoorange.game.Global;
-import com.redtoorange.game.components.physics.EnemyPhysicsComponent;
+import com.redtoorange.game.components.physics.character.EnemyPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.entities.characters.Character;
 import com.redtoorange.game.entities.characters.Player;
@@ -46,18 +46,17 @@ public class Enemy extends Character {
 
     @Override
     public void update( float deltaTime ) {
-        super.update( deltaTime );
-
         calculateDeltaInput();
         rotateToFacePlayer();
+
+        super.update( deltaTime );
     }
 
     protected void rotateToFacePlayer(){
-        spriteComponent.setRotation( Global.lookAt( spriteComponent.getCenter(), player.getPosition() ) );
+        spriteComponent.setRotation( Global.lookAt( position, player.getPosition() ) );
     }
 
     protected void calculateDeltaInput(){
-        //TODO: figure out how to rotate this around to face player
         deltaInput.set( 1, 0 );
         deltaInput.rotate( getRotation() );
     }

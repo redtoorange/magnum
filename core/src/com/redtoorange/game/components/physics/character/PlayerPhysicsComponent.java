@@ -1,4 +1,4 @@
-package com.redtoorange.game.components.physics;
+package com.redtoorange.game.components.physics.character;
 
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.systems.PhysicsSystem;

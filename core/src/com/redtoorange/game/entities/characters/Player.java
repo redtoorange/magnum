@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
-import com.redtoorange.game.components.physics.PlayerPhysicsComponent;
+import com.redtoorange.game.components.physics.character.PlayerPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.screens.PlayScreen;
 import com.redtoorange.game.systems.PhysicsSystem;
@@ -60,13 +60,13 @@ public class Player extends Character {
     }
 
     public void update(float deltaTime) {
-    	super.update(deltaTime);
-    	
-        mousePosition = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f));
+    	mousePosition = camera.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0f));
         crossHair.setCenter(mousePosition.x, mousePosition.y);
 
         processInput();
         rotatePlayerToMouseDirection();
+
+        super.update(deltaTime);
     }
 
     @Override
@@ -77,10 +77,7 @@ public class Player extends Character {
 
     
     protected void rotatePlayerToMouseDirection() {
-        if(spriteComponent != null){
-            float rotation = Global.lookAt( spriteComponent.getCenter(), new Vector2(mousePosition.x, mousePosition.y));
-            setRotation(rotation);
-        }
+        setRotation( Global.lookAt( position, new Vector2(mousePosition.x, mousePosition.y)) );
     }
 
     protected void processInput() {

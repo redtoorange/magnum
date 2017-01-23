@@ -2,7 +2,7 @@ package com.redtoorange.game.entities.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.redtoorange.game.components.physics.CharacterPhysicsComponent;
+import com.redtoorange.game.components.physics.character.CharacterPhysicsComponent;
 import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.entities.Entity;

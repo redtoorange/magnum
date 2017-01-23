@@ -1,6 +1,7 @@
-package com.redtoorange.game.components.physics;
+package com.redtoorange.game.components.physics.character;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.characters.Character;
 import com.redtoorange.game.factories.Box2DFactory;
@@ -36,9 +37,11 @@ public abstract class CharacterPhysicsComponent extends PhysicsComponent impleme
 
     @Override
     public void update(float deltaTime) {
-        body.setTransform(body.getPosition(), (float) Math.toRadians(character.getRotation()));
-        body.applyLinearImpulse(character.getDeltaInput().nor().scl(speed), body.getWorldCenter(), true);
+        if( Math.abs(character.getRotation() - Math.toDegrees( body.getAngle())) > 0.01f ){
+            body.setTransform(body.getPosition(), (float) Math.toRadians(character.getRotation()));
+        }
 
+        body.applyLinearImpulse(character.getDeltaInput().nor().scl(speed), body.getWorldCenter(), true);
         character.setPosition(body.getPosition());
     }
 

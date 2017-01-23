@@ -26,6 +26,7 @@ import com.redtoorange.game.entities.GameMap;
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
 import com.redtoorange.game.factories.Box2DFactory;
+import com.redtoorange.game.systems.GunUI;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -35,7 +36,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 13/Jan/2017
  */
 public class PlayScreen extends ScreenAdapter {
-    private static final int ENEMY_COUNT = 5;
+    private static final int ENEMY_COUNT = 15;
 
     private Core core;
 
@@ -53,13 +54,7 @@ public class PlayScreen extends ScreenAdapter {
     
     private Engine engine;
     private PhysicsSystem physicsSystem;
-
-    private OrthographicCamera uiCamera;
-    private Viewport uiViewport;
-    private Table rootTable;
-    private Stage uiStage;
-    private Image currentImage;
-    private TextureRegionDrawable regionDrawable = new TextureRegionDrawable( );
+    private GunUI gunui;
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -72,12 +67,14 @@ public class PlayScreen extends ScreenAdapter {
 
     private void init() {
         VisUI.load( );
+
         Gdx.input.setCursorCatched(true);
         Gdx.input.setCursorPosition(Global.WINDOW_WIDTH / 2, Global.WINDOW_HEIGHT / 2);
 
         debugRenderer = new Box2DDebugRenderer();
         contactManager = new ContactManager();
 
+        gunui = new GunUI();
         physicsSystem = new PhysicsSystem();
         physicsSystem.getWorld().setContactListener(contactManager);
 
@@ -102,18 +99,6 @@ public class PlayScreen extends ScreenAdapter {
         }
         engine.addEntity( player );
 
-        uiCamera = new OrthographicCamera(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
-        uiViewport = new ExtendViewport(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, uiCamera);
-
-        uiStage = new Stage( uiViewport );
-        rootTable = new Table( VisUI.getSkin() );
-        uiStage.addActor( rootTable );
-        rootTable.setFillParent( true );
-
-        rootTable.add( "Ammo Count or Something" ).right().bottom().size( 100f, 100f ).expand();
-        currentImage = new Image( regionDrawable );
-        rootTable.add( currentImage ).bottom().right().size( 200, 200 );
-
     }
 
     private void initWalls() {
@@ -135,7 +120,7 @@ public class PlayScreen extends ScreenAdapter {
 
     	engine.update(deltaTime);
         gameMap.update( deltaTime );
-        uiStage.act( deltaTime );
+        gunui.update( deltaTime );
 
         updateCameraPosition();
     }
@@ -154,9 +139,7 @@ public class PlayScreen extends ScreenAdapter {
         engine.render(batch);
         batch.end();
 
-        uiCamera.update();
-        uiStage.draw();
-
+        gunui.draw( batch );
 
         if(Global.DEBUG)
             debugRenderer.render(physicsSystem.getWorld(), camera.combined);
@@ -169,9 +152,8 @@ public class PlayScreen extends ScreenAdapter {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height);
-        uiViewport.update( width, height );
+        gunui.resize(width, height);
         camera.update();
-        uiCamera.update();
     }
     @Override
     public void dispose() {
@@ -196,7 +178,7 @@ public class PlayScreen extends ScreenAdapter {
             engine.dispose();
     }
 
-    public void swapCurrentImage(TextureRegion region){
-        regionDrawable.setRegion( region );
+    public GunUI getGunUI(){
+        return gunui;
     }
 }
