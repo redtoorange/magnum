@@ -33,14 +33,8 @@ public class MapRenderComponent extends RenderComponent {
 
 	@Override
 	public void draw( SpriteBatch batch ) {
-		if(batch.isDrawing())
-			batch.end();
-
 		mapRenderer.setView(camera);
 		mapRenderer.render();
-
-		if(!batch.isDrawing())
-			batch.begin();
 	}
 
 	@Override

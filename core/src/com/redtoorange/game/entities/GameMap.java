@@ -24,7 +24,7 @@ import com.redtoorange.game.components.rendering.MapRenderComponent;
 
 /**
  * GameMap.java - Encapsulated TiledMap renderer. Scaling is handled automatically.  Two Arrays will be
- * pulled for object layers name: "walls", "playerspawn".
+ * pulled for object layers name: "walls", "playerspawn".  Should NOT be added to the engine.
  *
  * @author - Andrew M.
  * @version - 13/Jan/2017
@@ -56,12 +56,20 @@ public class GameMap extends Entity implements Disposable {
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
         map = mapLoader.load(mapPath);
 
-
 		addComponent( new MapRenderComponent( this, map, mapScale, batch, camera ) );
 
         buildWalls();
         buildPlayerSpawns();
     }
+
+	/**
+	 * Must be called when the SpriteBatch is closed.
+	 * @param batch The closed SpriteBatch to use to render the Map.
+	 */
+	@Override
+	public void draw( SpriteBatch batch ) {
+		super.draw( batch );
+	}
 
 	@Override
     public void dispose() {

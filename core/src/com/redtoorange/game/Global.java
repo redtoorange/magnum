@@ -40,12 +40,12 @@ public class Global {
 	 */
     public static boolean DEBUG = true;
 
-    public static int WINDOW_WIDTH = 1280;
-    public static int WINDOW_HEIGHT = 1040;
+    public static int WINDOW_WIDTH = 1920;
+    public static int WINDOW_HEIGHT = 1080;
     public static String WINDOW_TITLE = "Some cool game thing";
 
-    public static float VIRTUAL_WIDTH = 15f;
-    public static float VIRTUAL_HEIGHT = 15f;
+    public static float VIRTUAL_WIDTH = 12f;
+    public static float VIRTUAL_HEIGHT = 10;
 
     public static short BULLET_COL_GROUP = -1;
 

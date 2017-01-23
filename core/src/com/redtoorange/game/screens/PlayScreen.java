@@ -99,7 +99,7 @@ public class PlayScreen extends ScreenAdapter {
         
         engine = new Engine();
 
-        engine.addEntity( gameMap );
+        //engine.addEntity( gameMap );
         engine.addEntity( player );
 
         for(int i = 0; i < ENEMY_COUNT; i++){
@@ -114,9 +114,9 @@ public class PlayScreen extends ScreenAdapter {
         uiStage.addActor( rootTable );
         rootTable.setFillParent( true );
 
-        rootTable.add( "Hi There" ).right().bottom().size( 100f, 100f ).expand();
+        rootTable.add( "Ammo Count or Something" ).right().bottom().size( 100f, 100f ).expand();
         currentImage = new Image( regionDrawable );
-        rootTable.add( currentImage ).bottom().right().size( 100f, 100f );
+        rootTable.add( currentImage ).bottom().right().size( 200, 200 );
 
     }
 
@@ -136,8 +136,11 @@ public class PlayScreen extends ScreenAdapter {
      */
     public void update(float deltaTime) {
     	physicsSystem.update(deltaTime);
+
     	engine.update(deltaTime);
+        gameMap.update( deltaTime );
         uiStage.act( deltaTime );
+
         updateCameraPosition();
     }
 
@@ -148,15 +151,17 @@ public class PlayScreen extends ScreenAdapter {
     public void draw() {
         camera.update();
 
+        gameMap.draw( batch );
+
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-
         engine.render(batch);
-
         batch.end();
 
         uiCamera.update();
         uiStage.draw();
+
+
         if(Global.DEBUG)
             debugRenderer.render(physicsSystem.getWorld(), camera.combined);
     }
