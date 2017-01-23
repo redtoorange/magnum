@@ -3,7 +3,6 @@ package com.redtoorange.game;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.*;
 import com.redtoorange.game.entities.Bullet;
-import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
 
 /**
@@ -22,8 +21,6 @@ public class ContactManager implements ContactListener {
 
         if ((bodyA.getUserData() instanceof Enemy && bodyB.getUserData() instanceof Bullet) ||
                 (bodyB.getUserData() instanceof Enemy && bodyA.getUserData() instanceof Bullet)) {
-            if(Global.DEBUG)
-                System.out.println("bullet hit enemy");
 
             if (bodyA.getUserData() instanceof Bullet) {
                 Bullet b =  ((Bullet) bodyA.getUserData());
@@ -43,9 +40,15 @@ public class ContactManager implements ContactListener {
         if ((bodyA.getUserData() instanceof Bullet && bodyB.getUserData() instanceof Rectangle) ||
                 (bodyB.getUserData() instanceof Bullet && bodyA.getUserData() instanceof Rectangle)) {
             if (bodyA.getUserData() instanceof Bullet) {
-                ((Bullet) bodyA.getUserData()).kill();
+                Bullet b =  ((Bullet) bodyA.getUserData());
+                if(b.isAlive()){
+                    b.kill();
+                }
             } else {
-                ((Bullet) bodyB.getUserData()).kill();
+                Bullet b =  ((Bullet) bodyB.getUserData());
+                if(b.isAlive()){
+                    b.kill();
+                }
             }
         }
     }

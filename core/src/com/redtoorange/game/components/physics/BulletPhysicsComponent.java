@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.redtoorange.game.components.rendering.SpriteComponent;
+import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
 import com.redtoorange.game.factories.Box2DFactory;
 import com.redtoorange.game.systems.PhysicsSystem;
@@ -14,7 +15,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public class BulletPhysicsComponent extends PhysicsComponent {
+public class BulletPhysicsComponent extends PhysicsComponent implements Updateable {
     public BulletPhysicsComponent(PhysicsSystem physicsSystem, Bullet bullet, SpriteComponent sc) {
         super(physicsSystem, bullet);
 
@@ -33,10 +34,6 @@ public class BulletPhysicsComponent extends PhysicsComponent {
         body.applyLinearImpulse(velocity.scl(speed), body.getWorldCenter(), true);
     }
 
-    public Vector2 getBodyPosition(){
-        return body.getPosition();
-    }
-
     @Override
     public void dispose( ) {
         //nothing here
@@ -44,5 +41,10 @@ public class BulletPhysicsComponent extends PhysicsComponent {
 
     public void killVelocity(){
         body.setLinearVelocity( 0f, 0f );
+    }
+
+    @Override
+    public void update(float deltaTime) {
+        parent.setPosition(body.getPosition());
     }
 }

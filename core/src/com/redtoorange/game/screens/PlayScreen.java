@@ -3,7 +3,6 @@ package com.redtoorange.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
@@ -18,13 +17,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
 import com.kotcrab.vis.ui.VisUI;
 import com.redtoorange.game.ContactManager;
 import com.redtoorange.game.Core;
-import com.redtoorange.game.entities.GameMap;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Engine;
+import com.redtoorange.game.entities.GameMap;
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
 import com.redtoorange.game.factories.Box2DFactory;
@@ -61,7 +59,7 @@ public class PlayScreen extends ScreenAdapter {
     private Table rootTable;
     private Stage uiStage;
     private Image currentImage;
-    private TextureRegionDrawable regionDrawable = new TextureRegionDrawable( new TextureRegion( new Texture( "bullet.png" ) ) );
+    private TextureRegionDrawable regionDrawable = new TextureRegionDrawable( );
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -99,12 +97,10 @@ public class PlayScreen extends ScreenAdapter {
         
         engine = new Engine();
 
-        //engine.addEntity( gameMap );
-        engine.addEntity( player );
-
         for(int i = 0; i < ENEMY_COUNT; i++){
             engine.addEntity( new Enemy( physicsSystem, new Vector2( MathUtils.random( 1, 19 ), MathUtils.random( 1, 19 ) ), player ) );
         }
+        engine.addEntity( player );
 
         uiCamera = new OrthographicCamera(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
         uiViewport = new ExtendViewport(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, uiCamera);
@@ -200,8 +196,7 @@ public class PlayScreen extends ScreenAdapter {
             engine.dispose();
     }
 
-    public void swapCurrentImage(Texture texture){
-        regionDrawable.getRegion().setTexture( texture );
-        //currentImage.setDrawable( new TextureRegionDrawable(  new TextureRegion( texture) ) );
+    public void swapCurrentImage(TextureRegion region){
+        regionDrawable.setRegion( region );
     }
 }

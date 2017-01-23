@@ -1,18 +1,14 @@
 package com.redtoorange.game.entities;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.Component;
 import com.redtoorange.game.components.rendering.MapRenderComponent;
@@ -29,7 +25,7 @@ import com.redtoorange.game.components.rendering.MapRenderComponent;
  * @author - Andrew M.
  * @version - 13/Jan/2017
  */
-public class GameMap extends Entity implements Disposable {
+public class GameMap extends Entity {
     private TiledMap map;
     private float mapScale = 1f;
 
@@ -51,6 +47,7 @@ public class GameMap extends Entity implements Disposable {
 	 * @param mapScale	The amount to resize the entire map by.  1/16f if you want 16 map pixels to equal 1 game unit.
 	 */
     public GameMap(String mapPath, SpriteBatch batch, OrthographicCamera camera, float mapScale) {
+        super(new Vector2(0, 0));
         this.mapScale = mapScale;
 
         TmxMapLoader mapLoader = new TmxMapLoader(new InternalFileHandleResolver());
@@ -61,15 +58,6 @@ public class GameMap extends Entity implements Disposable {
         buildWalls();
         buildPlayerSpawns();
     }
-
-	/**
-	 * Must be called when the SpriteBatch is closed.
-	 * @param batch The closed SpriteBatch to use to render the Map.
-	 */
-	@Override
-	public void draw( SpriteBatch batch ) {
-		super.draw( batch );
-	}
 
 	@Override
     public void dispose() {

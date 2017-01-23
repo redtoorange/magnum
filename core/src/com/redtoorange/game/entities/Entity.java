@@ -1,6 +1,7 @@
 package com.redtoorange.game.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.redtoorange.game.components.Component;
@@ -15,6 +16,19 @@ import com.redtoorange.game.engine.Updateable;
  */
 public abstract class Entity implements Disposable{
     protected Array<Component> components = new Array<Component>();
+    public Vector2 position = new Vector2(0, 0);
+
+    public Entity(Vector2 position){
+        this.position.set(position);
+    }
+
+    public Vector2 getPosition(){
+        return position;
+    }
+
+    public void setPosition(Vector2 position){
+        this.position.set(position);
+    }
 
     public void update(float deltaTime){
     	for(Component c : components){

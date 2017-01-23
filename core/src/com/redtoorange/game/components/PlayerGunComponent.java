@@ -5,12 +5,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.engine.Updateable;
@@ -39,7 +36,7 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private int maxBulletsInGun = 6;
     private int bulletsInGun = maxBulletsInGun;
 
-    private Texture[] bulletTextures = new Texture[maxBulletsInGun + 1];
+    private TextureRegion[] bulletTextures = new TextureRegion[maxBulletsInGun + 1];
 
     private boolean needsReload = false;
 
@@ -53,8 +50,10 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         initBullets(physicsSystem);
 
         for(int i = 0; i <= maxBulletsInGun; i++){
-            bulletTextures[i] = new Texture( "weapons/revolver/revolver_" + i + ".png" );
+            bulletTextures[i] = new TextureRegion( new Texture( "weapons/revolver/revolver_" + i + ".png" ) );
         }
+
+        playScreen.swapCurrentImage( bulletTextures[maxBulletsInGun] );
     }
 
     public void update(float deltaTime) {
@@ -136,14 +135,14 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         bulletSprite.setOriginCenter();
 
         for (int i = 0; i < MAX_BULLETS; i++) {
-            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem));
+            bulletController.add(new Bullet(new Sprite(bulletSprite), physicsSystem, new Vector2(-1000, -1000)));
         }
     }
 
     @Override
     public void dispose() {
-        for(Texture t : bulletTextures){
-            t.dispose();
+        for(TextureRegion t : bulletTextures){
+            t.getTexture().dispose();
         }
         if(Global.DEBUG)
             System.out.println("GunComponent disposed");

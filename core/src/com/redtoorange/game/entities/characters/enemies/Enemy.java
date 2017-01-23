@@ -11,22 +11,18 @@ import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 public class Enemy extends Character {
-    protected Vector2 playerPosition;
     protected Player player;
 
     public Enemy(PhysicsSystem physicsSystem, Vector2 spawnPosition, Player player) {
         this(physicsSystem, spawnPosition);
 
         this.player = player;
-        playerPosition = new Vector2( player.getPosition2D() );
     }
 
     public Enemy(PhysicsSystem physicsSystem, Vector2 spawnPosition ) {
-        super(physicsSystem);
+        super(spawnPosition, physicsSystem);
 
-        playerPosition = new Vector2( 0, 0 );
-
-        spriteComponent = new SpriteComponent( loadEnemySprite(spawnPosition), this );
+        spriteComponent = new SpriteComponent( loadEnemySprite(), this );
         physicsComponent = new EnemyPhysicsComponent( physicsSystem, this );
 
         addComponent( spriteComponent );
@@ -37,7 +33,7 @@ public class Enemy extends Character {
         this.player = player;
     }
 
-    protected Sprite loadEnemySprite( Vector2 position ){
+    protected Sprite loadEnemySprite( ){
         Texture temp = new Texture("zombie.png");
 
         Sprite sprite = new Sprite(temp);
@@ -49,11 +45,6 @@ public class Enemy extends Character {
     }
 
     @Override
-    public void dispose( ) {
-        super.dispose();
-    }
-
-    @Override
     public void update( float deltaTime ) {
         super.update( deltaTime );
 
@@ -62,8 +53,7 @@ public class Enemy extends Character {
     }
 
     protected void rotateToFacePlayer(){
-        playerPosition.set( player.getPosition2D() );
-        spriteComponent.setRotation( Global.lookAt( spriteComponent.getCenter(), playerPosition ) );
+        spriteComponent.setRotation( Global.lookAt( spriteComponent.getCenter(), player.getPosition() ) );
     }
 
     protected void calculateDeltaInput(){

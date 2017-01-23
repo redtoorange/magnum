@@ -1,6 +1,5 @@
 package com.redtoorange.game.components.rendering;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.redtoorange.game.components.Component;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.entities.Entity;

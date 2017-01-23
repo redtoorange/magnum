@@ -13,7 +13,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public class CharacterPhysicsComponent extends PhysicsComponent implements Updateable {
+public abstract class CharacterPhysicsComponent extends PhysicsComponent implements Updateable {
     protected float linearDampening;
     protected float angularDampening;
     protected float density;
@@ -34,9 +34,12 @@ public class CharacterPhysicsComponent extends PhysicsComponent implements Updat
         initPhysics(physicsSystem);
     }
 
+    @Override
     public void update(float deltaTime) {
         body.setTransform(body.getPosition(), (float) Math.toRadians(character.getRotation()));
         body.applyLinearImpulse(character.getDeltaInput().nor().scl(speed), body.getWorldCenter(), true);
+
+        character.setPosition(body.getPosition());
     }
 
     protected void initPhysics(PhysicsSystem physicsSystem) {

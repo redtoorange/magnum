@@ -14,14 +14,16 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 13/Jan/2017
  */
 public class Bullet extends Entity{
-    private float lifeTime = 0.0f;
-    private float maxLife = 5.0f;
-    private boolean alive = false;
+    protected float lifeTime = 0.0f;
+    protected float maxLife = 5.0f;
+    protected boolean alive = false;
 
-    private BulletPhysicsComponent bulletPhysicsComponent;
-    private SpriteComponent spriteComponent;
+    protected BulletPhysicsComponent bulletPhysicsComponent;
+    protected SpriteComponent spriteComponent;
 
-    public Bullet(Sprite sprite, PhysicsSystem physicsSystem) {
+    public Bullet(Sprite sprite, PhysicsSystem physicsSystem, Vector2 position) {
+        super(position);
+
         spriteComponent = new SpriteComponent(sprite, this);
         bulletPhysicsComponent = new BulletPhysicsComponent(physicsSystem, this, spriteComponent);
         
@@ -31,19 +33,18 @@ public class Bullet extends Entity{
 
     @Override
     public void update(float deltaTime) {
-    	super.update(deltaTime);
-    	
         if (alive) {
+            super.update(deltaTime);
+
             lifeTime += deltaTime;
-            if (lifeTime >= maxLife) {
+            if (lifeTime >= maxLife)
                 kill();
-            }
         }
     }
 
+    @Override
     public void draw(SpriteBatch batch) {
         if (alive) {
-            spriteComponent.setCenter(bulletPhysicsComponent.getBodyPosition());
             super.draw(batch);
         }
     }
@@ -55,11 +56,11 @@ public class Bullet extends Entity{
         bulletPhysicsComponent.fire(position, velocity, rotation);
 
         alive = true;
-        lifeTime = 0.0f;
     }
 
     public void kill(){
         this.alive = false;
+        lifeTime = 0.0f;
         bulletPhysicsComponent.killVelocity();
     }
 

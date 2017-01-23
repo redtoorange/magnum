@@ -8,8 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
 import com.redtoorange.game.components.physics.PlayerPhysicsComponent;
@@ -24,7 +22,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 13/Jan/2017
  */
 //TODO: optimize camera character
-public class Player extends Character implements Disposable {
+public class Player extends Character {
     private Sprite crossHair;
     private Vector3 mousePosition = new Vector3();
 
@@ -32,7 +30,7 @@ public class Player extends Character implements Disposable {
     private PlayerGunComponent gunComponent;
 
     public Player( OrthographicCamera camera, PlayScreen playScreen, PhysicsSystem physicsSystem, Vector2 spawnPoint) {
-        super(physicsSystem);
+        super(spawnPoint, physicsSystem);
 
         this.camera = camera;
         loadAssets( spawnPoint );
@@ -88,25 +86,17 @@ public class Player extends Character implements Disposable {
     protected void processInput() {
         deltaInput.set(0, 0);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE))
             Gdx.app.exit();
-        }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W))
             deltaInput.y = 1;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S))
             deltaInput.y = -1;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A))
             deltaInput.x = -1;
-        }
-
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D))
             deltaInput.x = 1;
-        }
     }
 
     public Vector3 getMousePosition(){

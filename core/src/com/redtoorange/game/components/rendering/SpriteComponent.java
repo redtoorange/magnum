@@ -36,6 +36,7 @@ public class SpriteComponent extends RenderComponent {
 
     @Override
     public void draw(SpriteBatch batch) {
+        setCenter(parent.getPosition());
         sprite.draw(batch);
     }
 
