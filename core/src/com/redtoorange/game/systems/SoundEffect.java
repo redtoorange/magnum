@@ -18,7 +18,8 @@ public class SoundEffect {
 
     public SoundEffect( String fileName, float length ){
         this.length = length;
-        sound = Gdx.audio.newSound( new FileHandle(fileName) );
+
+        sound = Gdx.audio.newSound( Gdx.files.internal( fileName ) );
     }
 
     public void update( float deltaTime ){
