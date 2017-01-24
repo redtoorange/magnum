@@ -3,7 +3,6 @@ package com.redtoorange.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Filter;
 
 /**
  * Global.java - Collection of global constants and common functions that don't belong in a class.
@@ -38,7 +37,7 @@ public class Global {
 	/**
 	 * Should the game run in Debug mode.  Provides additional output and physics debug information.
 	 */
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static int WINDOW_WIDTH = 1920;
     public static int WINDOW_HEIGHT = 1080;

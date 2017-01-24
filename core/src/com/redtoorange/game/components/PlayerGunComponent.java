@@ -17,8 +17,9 @@ import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.powerups.GunType;
 import com.redtoorange.game.entities.powerups.Inventory;
 import com.redtoorange.game.screens.PlayScreen;
+import com.redtoorange.game.systems.GunSoundManager;
 import com.redtoorange.game.systems.PhysicsSystem;
-import com.redtoorange.game.systems.SoundManager;
+import com.redtoorange.game.systems.SoundEffect;
 
 /**
  * PlayerGunComponent.java - DESCRIPTION
@@ -50,6 +51,9 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
     private final Player player;
     private PlayScreen playScreen;
 
+    private GunSoundManager gsm = new GunSoundManager();
+    private boolean reloading = false;
+
     public PlayerGunComponent( PhysicsSystem physicsSystem, Engine engine, Player player, PlayScreen playScreen) {
         super(player);
 
@@ -80,14 +84,16 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
             fireBullet = true;
         }
 
-        if (Gdx.input.isKeyJustPressed( Input.Keys.R) ) {
+        if (Gdx.input.isKeyJustPressed( Input.Keys.R) && !reloading ) {
             reload();
         }
     }
 
     private void updateBullets(float deltaTime) {
-        if (fireBullet && !needsReload) {
-            SoundManager.S.playSound( SoundManager.SoundType.GUNSHOT );
+        gsm.update( deltaTime );
+
+        if (fireBullet && !needsReload && !reloading) {
+            gsm.playSound( "gunshot" );
             bulletsInGun--;
             playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
 
@@ -97,8 +103,15 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
             fireBullet( );
         }
-        else if(fireBullet && needsReload){
-            SoundManager.S.playSound( SoundManager.SoundType.NOBULLETS );
+        else if(fireBullet && needsReload && !reloading){
+            SoundEffect se = gsm.getSoundEffect("nobullets");
+
+            if(!se.isPlaying())
+                gsm.playSound( "nobullets" );
+
+            fireBullet = false;
+        }
+        else{
             fireBullet = false;
         }
 
@@ -109,6 +122,11 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 
         if (timeTillFire >= 0f) {
             timeTillFire -= deltaTime;
+        }
+
+        if( reloading ){
+            if(!gsm.getSoundEffect("reloaded").isPlaying())
+                reloading = false;
         }
     }
 
@@ -123,8 +141,13 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
         playScreen.getGunUI().swapCurrentImage( bulletTextures[bulletsInGun] );
 
         if(bulletsInGun > 0) {
-            SoundManager.S.playSound( SoundManager.SoundType.RELOADED );
+            SoundEffect se = gsm.getSoundEffect("reloaded");
+
+            if(!se.isPlaying())
+                gsm.playSound( "reloaded" );
+
             needsReload = false;
+            reloading = true;
         }
     }
 

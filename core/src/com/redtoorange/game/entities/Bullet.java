@@ -7,6 +7,7 @@ import com.redtoorange.game.components.physics.BulletPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.systems.PhysicsSystem;
+import com.redtoorange.game.systems.SoundEffect;
 import com.redtoorange.game.systems.SoundManager;
 
 /**
@@ -23,6 +24,8 @@ public class Bullet extends Entity{
     protected BulletPhysicsComponent bulletPhysicsComponent;
     protected SpriteComponent spriteComponent;
 
+    private SoundManager sm = new SoundManager();
+
     public Bullet( Sprite sprite, Engine engine, PhysicsSystem physicsSystem, Vector2 position, float speed) {
         super(position, engine);
 
@@ -32,6 +35,8 @@ public class Bullet extends Entity{
         
         components.add(bulletPhysicsComponent);
         components.add(spriteComponent);
+
+        sm.addSound("bullethit", new SoundEffect("sounds/bullethit.wav", 0.15f));
     }
 
     @Override
@@ -43,6 +48,7 @@ public class Bullet extends Entity{
             if (lifeTime >= maxLife)
                 kill();
         }
+        sm.update(deltaTime);
     }
 
     @Override
@@ -62,7 +68,7 @@ public class Bullet extends Entity{
     }
 
     public void kill(){
-        SoundManager.S.playSound( SoundManager.SoundType.BULLETHIT );
+        sm.playSound("bullethit");
         this.alive = false;
         lifeTime = 0.0f;
         bulletPhysicsComponent.kill();

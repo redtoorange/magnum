@@ -1,5 +1,7 @@
 package com.redtoorange.game.systems;
 
+import box2dLight.RayHandler;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -22,13 +24,15 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 
 	private boolean createBodies = false;
 	private Array<BodyDef> newBodies = new Array<BodyDef>();
-
+	private RayHandler rayHandler;
 	/**
 	 * Create a new Box2D World with no gravity.
 	 */
 	public PhysicsSystem() {
 		super();
 		world = new World(new Vector2(0f, 0f), true);
+		rayHandler = new RayHandler( world );
+		rayHandler.setAmbientLight(0.01f, 0.01f, 0.01f, 0.01f);
 	}
 
 	/**
@@ -39,6 +43,13 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 	public PhysicsSystem( Vector2 gravity, boolean allowSleeping) {
 		super();
 		world = new World(new Vector2(gravity), allowSleeping);
+		rayHandler = new RayHandler( world );
+		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
+	}
+
+	public void render( OrthographicCamera camera ){
+		rayHandler.setCombinedMatrix( camera );
+		rayHandler.updateAndRender();
 	}
 
 	/**
@@ -110,5 +121,11 @@ public class PhysicsSystem extends System implements Updateable, Disposable{
 	public void dispose() {
 		if(world != null)
 			world.dispose();
+		if(rayHandler != null)
+			rayHandler.dispose();
+	}
+
+	public RayHandler getRayHandler(){
+		return rayHandler;
 	}
 }

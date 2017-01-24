@@ -1,8 +1,6 @@
 package com.redtoorange.game.systems;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.ArrayMap;
 
 /**
  * ${FILE_NAME}.java - Description
@@ -11,43 +9,28 @@ import com.badlogic.gdx.files.FileHandle;
  * @version 23/Jan/2017
  */
 public class SoundManager {
-	public static final SoundManager S = new SoundManager();
-
-	private Sound gunShot;
-	private Sound ammoPickup;
-	private Sound bulletHit;
-	private Sound reloaded;
-	private Sound nobullets;
+	protected ArrayMap<String, SoundEffect> sounds;
 
 	public SoundManager(){
-		gunShot = Gdx.audio.newSound( new FileHandle( "sounds/gunshot.wav" ) );
-		ammoPickup = Gdx.audio.newSound( new FileHandle( "sounds/ammopickup.wav" ) );
-		bulletHit = Gdx.audio.newSound( new FileHandle( "sounds/bullethit.wav" ) );
-		reloaded = Gdx.audio.newSound( new FileHandle( "sounds/reloaded.wav" ) );
-		nobullets = Gdx.audio.newSound( new FileHandle( "sounds/nobullets.wav" ) );
+		sounds = new ArrayMap<String, SoundEffect>();
 	}
 
-	public void playSound( SoundType type ){
-		switch(type){
-			case GUNSHOT:
-				gunShot.play();
-				break;
-			case AMMOPICKUP:
-				ammoPickup.play();
-				break;
-			case BULLETHIT:
-				bulletHit.play();
-				break;
-			case RELOADED:
-				reloaded.play();
-				break;
-			case NOBULLETS:
-				nobullets.play();
-				break;
+	public void playSound( String name ){
+		if(sounds.containsKey( name ))
+			sounds.get(name).play();
+	}
+
+	public void update( float deltaTime ){
+		for(SoundEffect se : sounds.values()){
+			se.update( deltaTime );
 		}
 	}
 
-	public enum SoundType{
-		GUNSHOT, AMMOPICKUP, BULLETHIT, RELOADED, NOBULLETS
+	public void addSound( String name, SoundEffect soundEffect){
+		sounds.put(name, soundEffect);
+	}
+
+	public SoundEffect getSoundEffect(String name){
+		return sounds.get(name);
 	}
 }

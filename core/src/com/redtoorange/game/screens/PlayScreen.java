@@ -1,17 +1,17 @@
 package com.redtoorange.game.screens;
 
+import box2dLight.ConeLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Filter;
-
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
@@ -54,6 +54,8 @@ public class PlayScreen extends ScreenAdapter {
     private Engine engine;
     private PhysicsSystem physicsSystem;
     private GunUI gunui;
+
+    private ConeLight testLight;
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -105,6 +107,7 @@ public class PlayScreen extends ScreenAdapter {
 
         engine.addEntity( player );
 
+        testLight = new ConeLight(physicsSystem.getRayHandler(), 10, new Color(1, 1, 1, 0.5f), 10f, playerSpawn.x, playerSpawn.y, 0, 30f);
     }
 
     private void initWalls() {
@@ -151,6 +154,11 @@ public class PlayScreen extends ScreenAdapter {
         batch.begin();
         engine.render(batch);
         batch.end();
+
+        testLight.setDirection( player.getRotation() );
+        testLight.setPosition( player.getPosition() );
+
+        physicsSystem.render( camera );
 
         gunui.draw( batch );
         //System.out.println( drawCounter );
