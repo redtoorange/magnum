@@ -27,39 +27,39 @@ public class GunUI extends System {
 	private Image currentImage;
 	private TextureRegionDrawable regionDrawable = new TextureRegionDrawable( );
 
-	public GunUI(){
-		init();
+	public GunUI( ) {
+		init( );
 	}
 
-	public void update(float deltaTime){
+	public void update( float deltaTime ) {
 		uiStage.act( deltaTime );
 	}
 
-	public void draw( SpriteBatch batch ){
-		uiCamera.update();
-		uiStage.draw();
+	public void draw( SpriteBatch batch ) {
+		uiCamera.update( );
+		uiStage.draw( );
 	}
 
-	private void init(){
-		uiCamera = new OrthographicCamera( Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT);
-		uiViewport = new ExtendViewport(Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, uiCamera);
+	private void init( ) {
+		uiCamera = new OrthographicCamera( Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT );
+		uiViewport = new ExtendViewport( Global.WINDOW_WIDTH, Global.WINDOW_HEIGHT, uiCamera );
 
 		uiStage = new Stage( uiViewport );
-		rootTable = new Table( VisUI.getSkin() );
+		rootTable = new Table( VisUI.getSkin( ) );
 		uiStage.addActor( rootTable );
 		rootTable.setFillParent( true );
 
-		rootTable.add( "Ammo Count or Something" ).right().bottom().size( 100f, 100f ).expand();
+		rootTable.add( "Ammo Count or Something" ).right( ).bottom( ).size( 100f, 100f ).expand( );
 		currentImage = new Image( regionDrawable );
-		rootTable.add( currentImage ).bottom().right().size( 200, 200 );
+		rootTable.add( currentImage ).bottom( ).right( ).size( 200, 200 );
 	}
 
-	public void resize(int width, int height) {
+	public void resize( int width, int height ) {
 		uiViewport.update( width, height );
-		uiCamera.update();
+		uiCamera.update( );
 	}
 
-	public void swapCurrentImage(TextureRegion region){
+	public void swapCurrentImage( TextureRegion region ) {
 		regionDrawable.setRegion( region );
 	}
 }

@@ -15,72 +15,72 @@ import com.redtoorange.game.engine.Updateable;
  * @author - Andrew M.
  * @version - 14/Jan/2017
  */
-public abstract class Entity implements Disposable{
-    protected Array<Component> components = new Array<Component>();
-    protected Vector2 position = new Vector2(0, 0);
+public abstract class Entity implements Disposable {
+	protected Array<Component> components = new Array<Component>( );
+	protected Vector2 position = new Vector2( 0, 0 );
 	protected Engine engine;
 
-    public Entity(Vector2 position, Engine engine){
-        this.position.set(position);
+	public Entity( Vector2 position, Engine engine ) {
+		this.position.set( position );
 		this.engine = engine;
-    }
+	}
 
-    public Vector2 getPosition(){
-        return position;
-    }
+	public Vector2 getPosition( ) {
+		return position;
+	}
 
-    public void setPosition(Vector2 position){
-        this.position.set(position);
-    }
+	public void setPosition( Vector2 position ) {
+		this.position.set( position );
+	}
 
-    public void update(float deltaTime){
-    	for(Component c : components){
-    		if(c instanceof Updateable)
-    			((Updateable)c).update(deltaTime);
-    	}
-    }
-    
-    public void draw(SpriteBatch batch){
-    	for(Component c : components){
-    		if(c instanceof Drawable)
-    			((Drawable)c).draw(batch);
-    	}
-    }
+	public void update( float deltaTime ) {
+		for ( Component c : components ) {
+			if ( c instanceof Updateable )
+				( ( Updateable ) c ).update( deltaTime );
+		}
+	}
 
-    public <T extends Component> T getComponent( Class<? extends Component> classOfInterest ) {
-        T obj = null;
+	public void draw( SpriteBatch batch ) {
+		for ( Component c : components ) {
+			if ( c instanceof Drawable )
+				( ( Drawable ) c ).draw( batch );
+		}
+	}
 
-        for ( Component c : components ) {
-            if( classOfInterest.isInstance( c ) ) obj = (T) c;
-            if( obj != null ) return obj;
-        }
+	public <T extends Component> T getComponent( Class<? extends Component> classOfInterest ) {
+		T obj = null;
 
-        return obj;
-    }
+		for ( Component c : components ) {
+			if ( classOfInterest.isInstance( c ) ) obj = ( T ) c;
+			if ( obj != null ) return obj;
+		}
 
-    protected void addComponent( Component c ){
-        components.add(c);
-    }
+		return obj;
+	}
 
-    protected void removeComponent( Component c){
-        components.removeValue(c, true);
-    }
-    
-    public Array<Component> getComponents(){
-    	return components;
-    }
+	protected void addComponent( Component c ) {
+		components.add( c );
+	}
 
-    public Engine getEngine(){
+	protected void removeComponent( Component c ) {
+		components.removeValue( c, true );
+	}
+
+	public Array<Component> getComponents( ) {
+		return components;
+	}
+
+	public Engine getEngine( ) {
 		return engine;
 	}
 
 	@Override
 	public void dispose( ) {
-		for( Component c : components)
-			c.dispose();
-		components.clear();
+		for ( Component c : components )
+			c.dispose( );
+		components.clear( );
 
-		if(engine != null )
+		if ( engine != null )
 			engine.removeEntity( this );
 	}
 }

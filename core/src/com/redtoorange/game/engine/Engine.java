@@ -7,34 +7,34 @@ import com.redtoorange.game.Global;
 import com.redtoorange.game.entities.Entity;
 import com.redtoorange.game.systems.System;
 
-public class Engine implements Disposable{
-	public static final String TAG = Engine.class.getSimpleName();
+public class Engine implements Disposable {
+	public static final String TAG = Engine.class.getSimpleName( );
 	private Array<Entity> entities;
-	
-	public Engine( ){
-		entities = new Array<Entity>();
+
+	public Engine( ) {
+		entities = new Array<Entity>( );
 	}
-	
-	public Engine( Array<System> systems, Array<Entity> entities ){
+
+	public Engine( Array<System> systems, Array<Entity> entities ) {
 		this.entities = entities;
 	}
-	
-	public void update(float deltaTime){
-		for( Entity e : entities){
-			e.update(deltaTime);
-		}
-	}
-	
-	public void render( SpriteBatch batch ){
-		for( Entity e : entities){
-			e.draw(batch);
+
+	public void update( float deltaTime ) {
+		for ( Entity e : entities ) {
+			e.update( deltaTime );
 		}
 	}
 
-	public void postLighting( SpriteBatch batch ){
-		for( Entity e : entities){
-			if( e instanceof PostLightingDraw)
-				((PostLightingDraw)e).postLightingDraw(batch);
+	public void render( SpriteBatch batch ) {
+		for ( Entity e : entities ) {
+			e.draw( batch );
+		}
+	}
+
+	public void postLighting( SpriteBatch batch ) {
+		for ( Entity e : entities ) {
+			if ( e instanceof PostLightingDraw )
+				( ( PostLightingDraw ) e ).postLightingDraw( batch );
 		}
 	}
 
@@ -45,13 +45,13 @@ public class Engine implements Disposable{
 	 * @return		Returns -1 if the Entity is already present and 0 if it was added successfully.
 	 * @param	e	A subclass of Entity that needs to be added to the Engine.
 	 */
-	public int addEntity( Entity e ){
+	public int addEntity( Entity e ) {
 		int result = Global.PRESENT;
 
-		if( !entities.contains(e, true) ){
+		if ( !entities.contains( e, true ) ) {
 			result = Global.SUCCESS;
 
-			entities.add(e);
+			entities.add( e );
 		}
 
 		return result;
@@ -64,22 +64,22 @@ public class Engine implements Disposable{
 	 * @return		Returns -2 if the Entity is not present and 0 if it was removed successfully.
 	 * @param	e	A subclass of Entity that needs to be removed from the engine.
 	 */
-	public int removeEntity( Entity e ){
+	public int removeEntity( Entity e ) {
 		int result = Global.FAILURE;
 
-		if(entities.contains(e, true)){
+		if ( entities.contains( e, true ) ) {
 			result = Global.SUCCESS;
 
-			entities.removeValue(e, true);
+			entities.removeValue( e, true );
 		}
 
 		return result;
 	}
 
-	public void dispose(){
-		for(Entity e : entities){
-			if(e != null)
-				e.dispose();
+	public void dispose( ) {
+		for ( Entity e : entities ) {
+			if ( e != null )
+				e.dispose( );
 		}
 	}
 }

@@ -3,7 +3,6 @@ package com.redtoorange.game.entities.powerups;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.redtoorange.game.components.Component;
 import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.physics.PowerUpPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
@@ -28,7 +27,7 @@ public abstract class PowerUp extends Entity {
 		Sprite sprite = new Sprite( texture );
 		sprite.setSize( 0.5f, 0.5f );
 		sprite.setCenter( position.x, position.y );
-		sprite.setOriginCenter();
+		sprite.setOriginCenter( );
 
 		spriteComponent = new SpriteComponent( sprite, this );
 		physicsComponent = new PowerUpPhysicsComponent( physicsSystem, this, spriteComponent );
@@ -37,16 +36,16 @@ public abstract class PowerUp extends Entity {
 		addComponent( physicsComponent );
 	}
 
-	public void absorbed( EntityCharacter c ){
-		dispose();
+	public void absorbed( EntityCharacter c ) {
+		dispose( );
 	}
 
-	public void dispose(){
-		super.dispose();
+	public void dispose( ) {
+		super.dispose( );
 
-		if(spriteComponent != null)
-			spriteComponent.dispose();
-		if(physicsComponent != null)
-			physicsComponent.dispose();
+		if ( spriteComponent != null )
+			spriteComponent.dispose( );
+		if ( physicsComponent != null )
+			physicsComponent.dispose( );
 	}
 }

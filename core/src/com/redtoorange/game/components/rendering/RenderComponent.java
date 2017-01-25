@@ -11,7 +11,7 @@ import com.redtoorange.game.entities.Entity;
  * @version - 20/Jan/2017
  */
 public abstract class RenderComponent extends Component implements Drawable {
-    public RenderComponent(Entity parent) {
-        super(parent);
-    }
+	public RenderComponent( Entity parent ) {
+		super( parent );
+	}
 }

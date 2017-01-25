@@ -13,57 +13,57 @@ import com.redtoorange.game.screens.PlayScreen;
  * @version - 13/Jan/2017
  */
 public class Core extends Game {
-    private FPSLogger logger = new FPSLogger();
-    private PlayScreen playScreen;
+	private FPSLogger logger = new FPSLogger( );
+	private PlayScreen playScreen;
 
-    @Override
-    public void create() {
-        playScreen = new PlayScreen(this);
-        setScreen(playScreen);
-    }
+	@Override
+	public void create( ) {
+		playScreen = new PlayScreen( this );
+		setScreen( playScreen );
+	}
 
-    @Override
-    public void setScreen(Screen screen) {
-        if (this.screen != null)
-            this.screen.dispose();
+	@Override
+	public void setScreen( Screen screen ) {
+		if ( this.screen != null )
+			this.screen.dispose( );
 
-        this.screen = screen;
+		this.screen = screen;
 
-        if (this.screen != null)
-            this.screen.show();
-    }
+		if ( this.screen != null )
+			this.screen.show( );
+	}
 
-    @Override
-    public void resize(int width, int height) {
-        screen.resize(width, height);
-        super.resize(width, height);
-    }
+	@Override
+	public void resize( int width, int height ) {
+		screen.resize( width, height );
+		super.resize( width, height );
+	}
 
-    @Override
-    public void render() {
-        if(Global.DEBUG)
-            logger.log();
+	@Override
+	public void render( ) {
+		if ( Global.DEBUG )
+			logger.log( );
 
-        update();
-        
-        draw();
-    }
+		update( );
 
-    public void update() {
-        playScreen.update(Gdx.graphics.getDeltaTime());
-    }
+		draw( );
+	}
 
-    public void draw() {
-        Global.clearScreen();
-        playScreen.draw();
-    }
+	public void update( ) {
+		playScreen.update( Gdx.graphics.getDeltaTime( ) );
+	}
 
-    @Override
-    public void dispose() {
-        if(Global.DEBUG)
-            System.out.println("Core disposed");
+	public void draw( ) {
+		Global.clearScreen( );
+		playScreen.draw( );
+	}
 
-        if (screen != null)
-            screen.dispose();
-    }
+	@Override
+	public void dispose( ) {
+		if ( Global.DEBUG )
+			System.out.println( "Core disposed" );
+
+		if ( screen != null )
+			screen.dispose( );
+	}
 }

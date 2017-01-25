@@ -9,14 +9,14 @@ import com.redtoorange.game.entities.Entity;
  * @author - Andrew M.
  * @version - 20/Jan/2017
  */
-public abstract class Component implements Disposable{    
-    protected Entity parent;
+public abstract class Component implements Disposable {
+	protected Entity parent;
 
-    public Component(Entity parent){
-        this.parent = parent;
-    }
+	public Component( Entity parent ) {
+		this.parent = parent;
+	}
 
-    public Entity getParent(){
-        return parent;
-    }
+	public Entity getParent( ) {
+		return parent;
+	}
 }

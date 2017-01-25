@@ -9,5 +9,5 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @version - 25/Jan/2017
  */
 public interface PostLightingDraw {
-    void postLightingDraw(SpriteBatch batch);
+	void postLightingDraw( SpriteBatch batch );
 }

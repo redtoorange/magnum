@@ -10,24 +10,24 @@ import com.redtoorange.game.entities.GameMap;
 /**
  * MapRenderComponent.java - Description
  *
- * @author	Andrew J. McGuiness
  * @version 20/Jan/2017
+ * @author Andrew J. McGuiness
  */
 public class MapRenderComponent extends RenderComponent {
 	private TiledMapRenderer mapRenderer;
 	private OrthographicCamera camera;
 
-	public MapRenderComponent(GameMap gameMap, TiledMap map, float mapScale, SpriteBatch batch, OrthographicCamera camera){
-		super(gameMap);
+	public MapRenderComponent( GameMap gameMap, TiledMap map, float mapScale, SpriteBatch batch, OrthographicCamera camera ) {
+		super( gameMap );
 
 		this.camera = camera;
-		mapRenderer = new OrthogonalTiledMapRenderer(map, mapScale, batch);
+		mapRenderer = new OrthogonalTiledMapRenderer( map, mapScale, batch );
 	}
 
 	@Override
 	public void draw( SpriteBatch batch ) {
-		mapRenderer.setView(camera);
-		mapRenderer.render();
+		mapRenderer.setView( camera );
+		mapRenderer.render( );
 	}
 
 	@Override

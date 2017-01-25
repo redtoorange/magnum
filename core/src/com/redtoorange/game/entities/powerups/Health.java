@@ -13,6 +13,6 @@ import com.redtoorange.game.systems.PhysicsSystem;
  */
 public class Health extends PowerUp {
 	public Health( Vector2 position, Engine engine, PhysicsSystem physicsSystem ) {
-		super( engine , position, new Texture( "" ), physicsSystem );
+		super( engine, position, new Texture( "" ), physicsSystem );
 	}
 }

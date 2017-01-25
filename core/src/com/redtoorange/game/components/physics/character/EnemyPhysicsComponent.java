@@ -11,13 +11,13 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @author
  * @version 20/Jan/2017
  */
-public class EnemyPhysicsComponent extends CharacterPhysicsComponent{
-	public EnemyPhysicsComponent( PhysicsSystem physicsSystem, Enemy enemy) {
-		super(physicsSystem, enemy, 1f, 10f, 10f, 5f);
+public class EnemyPhysicsComponent extends CharacterPhysicsComponent {
+	public EnemyPhysicsComponent( PhysicsSystem physicsSystem, Enemy enemy ) {
+		super( physicsSystem, enemy, 1f, 10f, 10f, 5f );
 
-		Filter f = body.getFixtureList().first().getFilterData();
+		Filter f = body.getFixtureList( ).first( ).getFilterData( );
 		f.categoryBits = Global.ENEMY;
 		f.maskBits = Global.WALL | Global.PLAYER | Global.BULLET_LIVE | Global.LIGHT | Global.ENEMY;
-		body.getFixtureList().first().setFilterData(f);
+		body.getFixtureList( ).first( ).setFilterData( f );
 	}
 }

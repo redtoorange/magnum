@@ -17,115 +17,122 @@ import com.redtoorange.game.engine.Updateable;
  * @author - Andrew M.
  * @version - 20/Jan/2017
  */
-public class PhysicsSystem extends System implements Updateable, Disposable{
+public class PhysicsSystem extends System implements Updateable, Disposable {
 	private World world;
 	private boolean cullBodies = false;
-	private Array<Body> deadBodies = new Array<Body>();
+	private Array<Body> deadBodies = new Array<Body>( );
 
 	private boolean createBodies = false;
-	private Array<BodyDef> newBodies = new Array<BodyDef>();
+	private Array<BodyDef> newBodies = new Array<BodyDef>( );
 	private RayHandler rayHandler;
+
 	/**
 	 * Create a new Box2D World with no gravity.
 	 */
-	public PhysicsSystem() {
-		super();
-		world = new World(new Vector2(0f, 0f), true);
+	public PhysicsSystem( ) {
+		super( );
+		world = new World( new Vector2( 0f, 0f ), true );
 		rayHandler = new RayHandler( world );
-		rayHandler.setAmbientLight(0.01f, 0.01f, 0.01f, 0.01f);
+		rayHandler.setAmbientLight( 0.01f, 0.01f, 0.01f, 0.01f );
 	}
 
 	/**
 	 * Create a new Box2D World with the specified gravity and sleeping.
-	 * @param gravity			How much x,y gravity to apply per time step.
-	 * @param allowSleeping		Should the World allow bodies to sleep.
+	 *
+	 * @param gravity       How much x,y gravity to apply per time step.
+	 * @param allowSleeping Should the World allow bodies to sleep.
 	 */
-	public PhysicsSystem( Vector2 gravity, boolean allowSleeping) {
-		super();
-		world = new World(new Vector2(gravity), allowSleeping);
+	public PhysicsSystem( Vector2 gravity, boolean allowSleeping ) {
+		super( );
+		world = new World( new Vector2( gravity ), allowSleeping );
 		rayHandler = new RayHandler( world );
-		rayHandler.setAmbientLight(0.1f, 0.1f, 0.1f, 0.1f);
+		rayHandler.setAmbientLight( 0.1f, 0.1f, 0.1f, 0.1f );
 	}
 
-	public void render( OrthographicCamera camera ){
+	public void render( OrthographicCamera camera ) {
 		rayHandler.setCombinedMatrix( camera );
-		rayHandler.updateAndRender();
+		rayHandler.updateAndRender( );
 	}
 
 	/**
 	 * Step the world based on the deltaTime.  All bodies will be stepped.  If there are any bodies to be destroyed,
 	 * it will happen after the world is stepped.
-	 * @param deltaTime		The amount of time to step the world by.
+	 *
+	 * @param deltaTime The amount of time to step the world by.
 	 */
 	@Override
-	public void update(float deltaTime) {
-		world.step(deltaTime, 6, 2);
-		
-		if(cullBodies)
-			destroyBodies();
-		if(createBodies)
-			spawnBodies();
+	public void update( float deltaTime ) {
+		world.step( deltaTime, 6, 2 );
+
+		if ( cullBodies )
+			destroyBodies( );
+		if ( createBodies )
+			spawnBodies( );
 	}
-	
+
 	/**
 	 * Helper function to prevent hanging bodies in the world.
 	 */
-	private void destroyBodies(){
+	private void destroyBodies( ) {
 		cullBodies = false;
-		for(int i = deadBodies.size-1; i >= 0; i--){
-			if(deadBodies.get(i) != null)
-				world.destroyBody( deadBodies.get(i) );
-			
-			deadBodies.removeIndex(i);
+		for ( int i = deadBodies.size - 1; i >= 0; i-- ) {
+			if ( deadBodies.get( i ) != null )
+				world.destroyBody( deadBodies.get( i ) );
+
+			deadBodies.removeIndex( i );
 		}
 	}
 
 	/**
 	 * Register the body for destruction.  It will cull the body after the time step on the first frame the
 	 * body was registered for destruction.
+	 *
 	 * @param body
 	 */
-	public void destroyBody(Body body){
+	public void destroyBody( Body body ) {
 		cullBodies = true;
-		deadBodies.add(body);
+		deadBodies.add( body );
 	}
 
 	/**
 	 * Create a new body in the world.  The world will handle the disposal of all bodies when it is destroyed.
-	 * @param bDef	Box2D Body Definition to used when creating the body.
-	 * @return		A reference to the body.
+	 *
+	 * @param bDef Box2D Body Definition to used when creating the body.
+	 *
+	 * @return A reference to the body.
 	 */
-	public Body createBody( BodyDef bDef){
-		return world.createBody(bDef);
+	public Body createBody( BodyDef bDef ) {
+		return world.createBody( bDef );
 	}
 
-	public void spawnBodies(){
+	public void spawnBodies( ) {
 		createBodies = false;
-		for(int i = newBodies.size-1; i >= 0; i--){
-			if(newBodies.get(i) != null)
-				world.createBody( newBodies.get(i) );
+		for ( int i = newBodies.size - 1; i >= 0; i-- ) {
+			if ( newBodies.get( i ) != null )
+				world.createBody( newBodies.get( i ) );
 
-			newBodies.removeIndex(i);
+			newBodies.removeIndex( i );
 		}
 	}
 
 	/**
 	 * Get a reference to the World.
+	 *
 	 * @return a reference to the World.  This will allow you to alter the World.
 	 */
-	public World getWorld(){
+	public World getWorld( ) {
 		return world;
 	}
 
 	@Override
-	public void dispose() {
-		if(world != null)
-			world.dispose();
-		if(rayHandler != null)
-			rayHandler.dispose();
+	public void dispose( ) {
+		if ( world != null )
+			world.dispose( );
+		if ( rayHandler != null )
+			rayHandler.dispose( );
 	}
 
-	public RayHandler getRayHandler(){
+	public RayHandler getRayHandler( ) {
 		return rayHandler;
 	}
 }

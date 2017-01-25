@@ -18,42 +18,42 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 14/Jan/2017
  */
 public class BulletPhysicsComponent extends PhysicsComponent implements Updateable {
-    private Rectangle bounding;
-    private float speed;
+	private Rectangle bounding;
+	private float speed;
 
-    public BulletPhysicsComponent(PhysicsSystem physicsSystem, Bullet bullet, SpriteComponent sc) {
-        super(physicsSystem, bullet);
+	public BulletPhysicsComponent( PhysicsSystem physicsSystem, Bullet bullet, SpriteComponent sc ) {
+		super( physicsSystem, bullet );
 
-        this.speed = bullet.getSpeed();
-        bounding = new Rectangle(sc.getBoundingBox());
-        bounding.setSize(sc.getWidth()/4f, sc.getHeight() / 4f);
-    }
+		this.speed = bullet.getSpeed( );
+		bounding = new Rectangle( sc.getBoundingBox( ) );
+		bounding.setSize( sc.getWidth( ) / 4f, sc.getHeight( ) / 4f );
+	}
 
-    public void fire(Vector2 position, Vector2 velocity, float rotation){
-        body = Box2DFactory.createBody(physicsSystem, bounding, BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, true);
+	public void fire( Vector2 position, Vector2 velocity, float rotation ) {
+		body = Box2DFactory.createBody( physicsSystem, bounding, BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, true );
 
-        body.setUserData(parent);
-        body.setTransform(position, (float) Math.toRadians(rotation));
-        body.applyLinearImpulse(velocity.scl(speed), body.getWorldCenter(), true);
+		body.setUserData( parent );
+		body.setTransform( position, ( float ) Math.toRadians( rotation ) );
+		body.applyLinearImpulse( velocity.scl( speed ), body.getWorldCenter( ), true );
 
-        Filter f = body.getFixtureList().first().getFilterData();
-        f.categoryBits = Global.BULLET_LIVE;
-        f.maskBits = Global.ENEMY | Global.WALL;
-        body.getFixtureList().first().setFilterData( f );
-    }
+		Filter f = body.getFixtureList( ).first( ).getFilterData( );
+		f.categoryBits = Global.BULLET_LIVE;
+		f.maskBits = Global.ENEMY | Global.WALL;
+		body.getFixtureList( ).first( ).setFilterData( f );
+	}
 
-    @Override
-    public void dispose( ) {
-        destroy();
-    }
+	@Override
+	public void dispose( ) {
+		destroy( );
+	}
 
-    public void kill(){
-        physicsSystem.destroyBody( body );
-        body = null;
-    }
+	public void kill( ) {
+		physicsSystem.destroyBody( body );
+		body = null;
+	}
 
-    @Override
-    public void update(float deltaTime) {
-        parent.setPosition(body.getPosition());
-    }
+	@Override
+	public void update( float deltaTime ) {
+		parent.setPosition( body.getPosition( ) );
+	}
 }

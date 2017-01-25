@@ -15,100 +15,106 @@ import com.redtoorange.game.entities.Entity;
  * @version - 20/Jan/2017
  */
 public class SpriteComponent extends RenderComponent {
-    private Sprite sprite;
+	private Sprite sprite;
 
-    /**
-     * A clone of this is stored inside the component.
-     * @param sprite    Sprite that should be cloned.
-     * @param parent    The parent entity.
-     */
-    public SpriteComponent(Sprite sprite, Entity parent) {
-        super(parent);
-    	
-        this.sprite = new Sprite(sprite);
-        sprite.setOriginCenter();
-    }
+	/**
+	 * A clone of this is stored inside the component.
+	 *
+	 * @param sprite Sprite that should be cloned.
+	 * @param parent The parent entity.
+	 */
+	public SpriteComponent( Sprite sprite, Entity parent ) {
+		super( parent );
 
-    public void setColor(float r, float g, float b, float a){
-        sprite.setColor( new Color( r, g, b, a ) );
-    }
+		this.sprite = new Sprite( sprite );
+		sprite.setOriginCenter( );
+	}
 
-    @Override
-    public void draw(SpriteBatch batch) {
-        setCenter(parent.getPosition());
-        sprite.draw(batch);
-    }
+	public void setColor( float r, float g, float b, float a ) {
+		sprite.setColor( new Color( r, g, b, a ) );
+	}
 
-    public Sprite getSprite(){
-        return sprite;
-    }
+	@Override
+	public void draw( SpriteBatch batch ) {
+		setCenter( parent.getPosition( ) );
+		sprite.draw( batch );
+	}
 
-    /**
-     * Set the Sprite's rotation in degrees.
-     * @param rotation  the degree representation the Sprite should be set to
-     */
-    public void setRotation( float rotation ){
-        sprite.setRotation(rotation);
-    }
+	public Sprite getSprite( ) {
+		return sprite;
+	}
 
-    /**
-     * Get the Sprite's current rotation value.
-     * @return  A float representing the rotation of the sprite in degrees
-     */
-    public float getRotation(){
-        return sprite.getRotation();
-    }
+	/**
+	 * Get the Sprite's current rotation value.
+	 *
+	 * @return A float representing the rotation of the sprite in degrees
+	 */
+	public float getRotation( ) {
+		return sprite.getRotation( );
+	}
 
-    /**
-     * Set the center of the Sprite, this does NOT set the upper left position like a normal position.set()
-     * @param center    Where the center of the sprite should be draw.
-     */
-    public void setCenter(Vector2 center){
-        sprite.setCenter(center.x, center.y);
-    }
+	/**
+	 * Set the Sprite's rotation in degrees.
+	 *
+	 * @param rotation the degree representation the Sprite should be set to
+	 */
+	public void setRotation( float rotation ) {
+		sprite.setRotation( rotation );
+	}
 
-    public void setCenterX(float x){
-        sprite.setCenter(x, getCenterY());
-    }
+	/**
+	 * Helper method to allow the grabbing of a new Vector2 reference to the center of the Sprite.
+	 *
+	 * @return The Center of the Sprite
+	 */
+	public Vector2 getCenter( ) {
+		return new Vector2( getCenterX( ), getCenterY( ) );
+	}
 
-    public void setCenterY(float y){
-        sprite.setCenter(getCenterX(), y);
-    }
+	/**
+	 * Set the center of the Sprite, this does NOT set the upper left position like a normal position.set()
+	 *
+	 * @param center Where the center of the sprite should be draw.
+	 */
+	public void setCenter( Vector2 center ) {
+		sprite.setCenter( center.x, center.y );
+	}
 
-    /**
-     * Helper method to allow the grabbing of a new Vector2 reference to the center of the Sprite.
-     * @return The Center of the Sprite
-     */
-    public Vector2 getCenter( ){
-        return new Vector2(getCenterX(), getCenterY());
-    }
+	public float getCenterX( ) {
+		return ( sprite.getX( ) + ( sprite.getWidth( ) / 2f ) );
+	}
 
-    public float getCenterX(){
-        return (sprite.getX() + (sprite.getWidth()/2f));
-    }
+	public void setCenterX( float x ) {
+		sprite.setCenter( x, getCenterY( ) );
+	}
 
-    public float getCenterY(){
-        return (sprite.getY() + (sprite.getHeight()/2f));
-    }
+	public float getCenterY( ) {
+		return ( sprite.getY( ) + ( sprite.getHeight( ) / 2f ) );
+	}
 
-    /**
-     * Wrapper for the Sprite getBoundingRectangle() method.
-     * @return  The smallest possible rectangle that will fit around the Sprite Image.
-     */
-    public Rectangle getBoundingBox(){
-        return sprite.getBoundingRectangle();
-    }
+	public void setCenterY( float y ) {
+		sprite.setCenter( getCenterX( ), y );
+	}
 
-    public float getWidth(){
-        return sprite.getWidth();
-    }
+	/**
+	 * Wrapper for the Sprite getBoundingRectangle() method.
+	 *
+	 * @return The smallest possible rectangle that will fit around the Sprite Image.
+	 */
+	public Rectangle getBoundingBox( ) {
+		return sprite.getBoundingRectangle( );
+	}
 
-    public float getHeight(){
-        return sprite.getHeight();
-    }
+	public float getWidth( ) {
+		return sprite.getWidth( );
+	}
 
-    @Override
-    public void dispose( ) {
-        //Nothing to dispose here
-    }
+	public float getHeight( ) {
+		return sprite.getHeight( );
+	}
+
+	@Override
+	public void dispose( ) {
+		//Nothing to dispose here
+	}
 }

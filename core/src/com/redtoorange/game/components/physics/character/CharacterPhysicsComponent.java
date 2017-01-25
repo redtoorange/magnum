@@ -15,50 +15,50 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 14/Jan/2017
  */
 public abstract class CharacterPhysicsComponent extends PhysicsComponent implements Updateable {
-    protected float linearDampening;
-    protected float angularDampening;
-    protected float density;
+	protected float linearDampening;
+	protected float angularDampening;
+	protected float density;
 
-    protected EntityCharacter entityCharacter;
+	protected EntityCharacter entityCharacter;
 
-    public CharacterPhysicsComponent(PhysicsSystem physicsSystem, EntityCharacter entityCharacter,
-                                     float speed, float linearDampening, float angularDampening,
-                                     float density) {
-        super(physicsSystem, entityCharacter );
+	public CharacterPhysicsComponent( PhysicsSystem physicsSystem, EntityCharacter entityCharacter,
+									  float speed, float linearDampening, float angularDampening,
+									  float density ) {
+		super( physicsSystem, entityCharacter );
 
-        this.speed = speed;
-        this.linearDampening = linearDampening;
-        this.angularDampening = angularDampening;
-        this.density = density;
-        this.entityCharacter = entityCharacter;
+		this.speed = speed;
+		this.linearDampening = linearDampening;
+		this.angularDampening = angularDampening;
+		this.density = density;
+		this.entityCharacter = entityCharacter;
 
-        initPhysics(physicsSystem);
-    }
+		initPhysics( physicsSystem );
+	}
 
-    @Override
-    public void update(float deltaTime) {
-        if( Math.abs( entityCharacter.getRotation() - Math.toDegrees( body.getAngle())) > 0.01f ){
-            body.setTransform(body.getPosition(), (float) Math.toRadians( entityCharacter.getRotation()));
-        }
+	@Override
+	public void update( float deltaTime ) {
+		if ( Math.abs( entityCharacter.getRotation( ) - Math.toDegrees( body.getAngle( ) ) ) > 0.01f ) {
+			body.setTransform( body.getPosition( ), ( float ) Math.toRadians( entityCharacter.getRotation( ) ) );
+		}
 
-        body.applyLinearImpulse( entityCharacter.getDeltaInput().nor().scl(speed), body.getWorldCenter(), true);
-        entityCharacter.setPosition(body.getPosition());
-    }
+		body.applyLinearImpulse( entityCharacter.getDeltaInput( ).nor( ).scl( speed ), body.getWorldCenter( ), true );
+		entityCharacter.setPosition( body.getPosition( ) );
+	}
 
-    protected void initPhysics(PhysicsSystem physicsSystem) {
-        body = Box2DFactory.createBody(physicsSystem, entityCharacter.getSpriteComponent().getBoundingBox(), BodyDef.BodyType.DynamicBody,
-                density, 0f, 0f, false, false );
+	protected void initPhysics( PhysicsSystem physicsSystem ) {
+		body = Box2DFactory.createBody( physicsSystem, entityCharacter.getSpriteComponent( ).getBoundingBox( ), BodyDef.BodyType.DynamicBody,
+				density, 0f, 0f, false, false );
 
-        body.setUserData( entityCharacter );
+		body.setUserData( entityCharacter );
 
-        body.setFixedRotation(true);
-        body.setLinearDamping(linearDampening);
-        body.setAngularDamping(angularDampening);
-        body.setSleepingAllowed(false);
-    }
+		body.setFixedRotation( true );
+		body.setLinearDamping( linearDampening );
+		body.setAngularDamping( angularDampening );
+		body.setSleepingAllowed( false );
+	}
 
-    @Override
-    public void dispose( ) {
-        destroy();
-    }
+	@Override
+	public void dispose( ) {
+		destroy( );
+	}
 }

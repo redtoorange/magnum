@@ -1,5 +1,5 @@
 package com.redtoorange.game.engine;
 
 public interface Updateable {
-	void update(float deltaTime);
+	void update( float deltaTime );
 }

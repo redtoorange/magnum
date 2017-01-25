@@ -18,23 +18,23 @@ public class PowerUpPhysicsComponent extends PhysicsComponent {
 	public PowerUpPhysicsComponent( PhysicsSystem physicsSystem, Entity parent, SpriteComponent sc ) {
 		super( physicsSystem, parent );
 
-		initPhysics(sc);
+		initPhysics( sc );
 	}
 
-	private void initPhysics(SpriteComponent sc){
-		body = Box2DFactory.createBody(physicsSystem, sc.getBoundingBox(), BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, false);
+	private void initPhysics( SpriteComponent sc ) {
+		body = Box2DFactory.createBody( physicsSystem, sc.getBoundingBox( ), BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, false );
 
-		body.setUserData(parent);
+		body.setUserData( parent );
 
-		Filter f = body.getFixtureList().first().getFilterData();
+		Filter f = body.getFixtureList( ).first( ).getFilterData( );
 		f.categoryBits = Global.AMMO;
-		body.getFixtureList().first().setFilterData( f );
+		body.getFixtureList( ).first( ).setFilterData( f );
 
-		body.setTransform(sc.getCenter(), (float) Math.toRadians(sc.getRotation()));
+		body.setTransform( sc.getCenter( ), ( float ) Math.toRadians( sc.getRotation( ) ) );
 	}
 
 	@Override
 	public void dispose( ) {
-		destroy();
+		destroy( );
 	}
 }

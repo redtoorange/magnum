@@ -12,12 +12,12 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 14/Jan/2017
  */
 public class PlayerPhysicsComponent extends CharacterPhysicsComponent {
-    public PlayerPhysicsComponent(PhysicsSystem physicsSystem, Player player) {
-    	super(physicsSystem, player, 5f, 10f, 10f,
-                5f);
-        Filter f = body.getFixtureList().first().getFilterData();
-        f.categoryBits = Global.PLAYER;
-        f.maskBits = Global.WALL | Global.ENEMY | Global.AMMO;
-        body.getFixtureList().first().setFilterData(f);
-    }
+	public PlayerPhysicsComponent( PhysicsSystem physicsSystem, Player player ) {
+		super( physicsSystem, player, 5f, 10f, 10f,
+				5f );
+		Filter f = body.getFixtureList( ).first( ).getFilterData( );
+		f.categoryBits = Global.PLAYER;
+		f.maskBits = Global.WALL | Global.ENEMY | Global.AMMO;
+		body.getFixtureList( ).first( ).setFilterData( f );
+	}
 }
