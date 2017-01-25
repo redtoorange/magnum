@@ -17,7 +17,7 @@ import com.redtoorange.game.engine.Updateable;
  */
 public abstract class Entity implements Disposable{
     protected Array<Component> components = new Array<Component>();
-    public Vector2 position = new Vector2(0, 0);
+    protected Vector2 position = new Vector2(0, 0);
 	protected Engine engine;
 
     public Entity(Vector2 position, Engine engine){

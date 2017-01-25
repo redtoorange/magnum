@@ -40,7 +40,7 @@ public class Global {
 	/**
 	 * Should the game run in Debug mode.  Provides additional output and physics debug information.
 	 */
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     public static int WINDOW_WIDTH = 1920;
     public static int WINDOW_HEIGHT = 1080;

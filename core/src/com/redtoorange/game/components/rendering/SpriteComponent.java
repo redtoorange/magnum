@@ -15,7 +15,6 @@ import com.redtoorange.game.entities.Entity;
  * @version - 20/Jan/2017
  */
 public class SpriteComponent extends RenderComponent {
-	public static String TAG = SpriteComponent.class.getSimpleName();
     private Sprite sprite;
 
     /**
