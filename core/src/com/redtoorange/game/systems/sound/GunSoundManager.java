@@ -1,4 +1,4 @@
-package com.redtoorange.game.systems;
+package com.redtoorange.game.systems.sound;
 
 /**
  * GunSoundManager.java - DESCRIPTION

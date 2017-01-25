@@ -3,6 +3,8 @@ package com.redtoorange.game.components.physics;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.redtoorange.game.Global;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Updateable;
 import com.redtoorange.game.entities.Bullet;
@@ -33,6 +35,11 @@ public class BulletPhysicsComponent extends PhysicsComponent implements Updateab
         body.setUserData(parent);
         body.setTransform(position, (float) Math.toRadians(rotation));
         body.applyLinearImpulse(velocity.scl(speed), body.getWorldCenter(), true);
+
+        Filter f = body.getFixtureList().first().getFilterData();
+        f.categoryBits = Global.BULLET_LIVE;
+        f.maskBits = Global.ENEMY | Global.WALL;
+        body.getFixtureList().first().setFilterData( f );
     }
 
     @Override

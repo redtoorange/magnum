@@ -17,9 +17,9 @@ import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.powerups.GunType;
 import com.redtoorange.game.entities.powerups.Inventory;
 import com.redtoorange.game.screens.PlayScreen;
-import com.redtoorange.game.systems.GunSoundManager;
+import com.redtoorange.game.systems.sound.GunSoundManager;
 import com.redtoorange.game.systems.PhysicsSystem;
-import com.redtoorange.game.systems.SoundEffect;
+import com.redtoorange.game.systems.sound.SoundEffect;
 
 /**
  * PlayerGunComponent.java - DESCRIPTION

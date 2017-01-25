@@ -13,6 +13,7 @@ import com.redtoorange.game.components.PlayerGunComponent;
 import com.redtoorange.game.components.physics.character.PlayerPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Engine;
+import com.redtoorange.game.engine.PostLightingDraw;
 import com.redtoorange.game.entities.powerups.GunType;
 import com.redtoorange.game.entities.powerups.Inventory;
 import com.redtoorange.game.screens.PlayScreen;
@@ -25,7 +26,7 @@ import com.redtoorange.game.systems.PhysicsSystem;
  * @version - 13/Jan/2017
  */
 //TODO: optimize camera entityCharacter
-public class Player extends EntityCharacter {
+public class Player extends EntityCharacter implements PostLightingDraw{
     private Inventory ammo = new Inventory();
 
     private Sprite crossHair;
@@ -76,11 +77,14 @@ public class Player extends EntityCharacter {
 
     @Override
     public void draw(SpriteBatch batch) {
-    	crossHair.draw(batch);
         super.draw(batch);
     }
 
-    
+    @Override
+    public void postLightingDraw(SpriteBatch batch) {
+        crossHair.draw(batch);
+    }
+
     protected void rotatePlayerToMouseDirection() {
         setRotation( Global.lookAt( position, new Vector2(mousePosition.x, mousePosition.y)) );
     }

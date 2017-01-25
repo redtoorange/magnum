@@ -7,8 +7,8 @@ import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.entities.characters.EntityCharacter;
 import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.systems.PhysicsSystem;
-import com.redtoorange.game.systems.SoundEffect;
-import com.redtoorange.game.systems.SoundManager;
+import com.redtoorange.game.systems.sound.SoundEffect;
+import com.redtoorange.game.systems.sound.SoundManager;
 
 /**
  * ${FILE_NAME}.java - Description

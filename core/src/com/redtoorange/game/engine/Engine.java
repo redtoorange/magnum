@@ -25,12 +25,19 @@ public class Engine implements Disposable{
 		}
 	}
 	
-	public void render( SpriteBatch batch){
+	public void render( SpriteBatch batch ){
 		for( Entity e : entities){
 			e.draw(batch);
 		}
 	}
-	
+
+	public void postLighting( SpriteBatch batch ){
+		for( Entity e : entities){
+			if( e instanceof PostLightingDraw)
+				((PostLightingDraw)e).postLightingDraw(batch);
+		}
+	}
+
 	/*
 	 * Adds an Entity to the engine.  All attached Systems will parse the entities components for compatible types.
 	 * Comparison for equivalence is always by reference.

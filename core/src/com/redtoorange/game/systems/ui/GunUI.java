@@ -1,4 +1,4 @@
-package com.redtoorange.game.systems;
+package com.redtoorange.game.systems.ui;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.redtoorange.game.Global;
+import com.redtoorange.game.systems.System;
 
 /**
  * ${FILE_NAME}.java - Description

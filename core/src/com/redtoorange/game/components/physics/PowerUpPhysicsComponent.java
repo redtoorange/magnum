@@ -3,13 +3,10 @@ package com.redtoorange.game.components.physics;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.redtoorange.game.Global;
-import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.entities.Entity;
 import com.redtoorange.game.factories.Box2DFactory;
 import com.redtoorange.game.systems.PhysicsSystem;
-
-import javax.xml.bind.annotation.XmlElementDecl;
 
 /**
  * ${FILE_NAME}.java - Description
@@ -28,11 +25,11 @@ public class PowerUpPhysicsComponent extends PhysicsComponent {
 		body = Box2DFactory.createBody(physicsSystem, sc.getBoundingBox(), BodyDef.BodyType.DynamicBody, 10f, 0, 0, true, false);
 
 		body.setUserData(parent);
+
 		Filter f = body.getFixtureList().first().getFilterData();
-
 		f.categoryBits = Global.AMMO;
-
 		body.getFixtureList().first().setFilterData( f );
+
 		body.setTransform(sc.getCenter(), (float) Math.toRadians(sc.getRotation()));
 	}
 

@@ -7,8 +7,8 @@ import com.redtoorange.game.components.physics.BulletPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.systems.PhysicsSystem;
-import com.redtoorange.game.systems.SoundEffect;
-import com.redtoorange.game.systems.SoundManager;
+import com.redtoorange.game.systems.sound.SoundEffect;
+import com.redtoorange.game.systems.sound.SoundManager;
 
 /**
  * Bullet.java - Basic bullet class.  Will be initialized in an Array and spawned/reset as needed (pooled for efficiency).

@@ -1,8 +1,7 @@
-package com.redtoorange.game.systems;
+package com.redtoorange.game.systems.sound;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.files.FileHandle;
 
 /**
  * SoundEffect.java - DESCRIPTION

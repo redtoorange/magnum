@@ -13,12 +13,14 @@ import com.badlogic.gdx.math.Vector2;
 //TODO: Create a different class for the functions?
 public class Global {
 
-	public static final short ENEMY = 1;
-	public static final short PLAYER = 2;
-	public static final short BULLET_LIVE = 3;
-	public static final short BULLET_DEAD = 4;
-	public static final short WALL = 5;
-	public static final short AMMO = 6;
+	public static final short ENEMY = 		0x0001;
+	public static final short PLAYER = 		0x0002;
+	public static final short BULLET_LIVE = 0x0004;
+	public static final short BULLET_DEAD = 0x0008;
+	public static final short WALL = 		0x0010;
+	public static final short AMMO = 		0x0020;
+	public static final short LIGHT = 		0x0040;
+
 
 
 

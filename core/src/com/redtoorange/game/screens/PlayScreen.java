@@ -27,7 +27,7 @@ import com.redtoorange.game.entities.characters.Player;
 import com.redtoorange.game.entities.characters.enemies.Enemy;
 import com.redtoorange.game.entities.powerups.Ammo;
 import com.redtoorange.game.factories.Box2DFactory;
-import com.redtoorange.game.systems.GunUI;
+import com.redtoorange.game.systems.ui.GunUI;
 import com.redtoorange.game.systems.PhysicsSystem;
 
 /**
@@ -59,6 +59,7 @@ public class PlayScreen extends ScreenAdapter {
 
     private ConeLight flashLight;
     private PointLight playerLight;
+    private PointLight houseLight;
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -111,16 +112,22 @@ public class PlayScreen extends ScreenAdapter {
         engine.addEntity( player );
 
         playerLight = new PointLight(physicsSystem.getRayHandler(), 10, new Color( 1,1,1, .75f ), 1f, playerSpawn.x, playerSpawn.y);
-        flashLight = new ConeLight(physicsSystem.getRayHandler(), 10, new Color(1, 1, 1, .75f), 10f, playerSpawn.x, playerSpawn.y, 0, 30f);
+        houseLight = new PointLight(physicsSystem.getRayHandler(), 100, new Color( 1,.5f,.5f, .75f ), 10f, 21, 3.5f);
+        //houseLight.setSoft( false );
+
+        flashLight = new ConeLight(physicsSystem.getRayHandler(), 100, new Color(1, 1, 1, .75f), 10f, playerSpawn.x, playerSpawn.y, 0, 30f);
+
         Filter f = new Filter();
-        f.maskBits = Global.ENEMY;
+        f.categoryBits  = Global.LIGHT;
+        f.maskBits      = Global.ENEMY | Global.WALL;
         Light.setGlobalContactFilter( f );
     }
 
     private void initWalls() {
         for (Rectangle r : gameMap.walls) {
             Filter w = new Filter();
-            w.groupIndex = 1;
+            w.groupIndex = Global.WALL;
+            w.maskBits = Global.ENEMY | Global.PLAYER | Global.LIGHT | Global.BULLET_LIVE;
             Body b = Box2DFactory.createStaticBody(physicsSystem, r);
             b.getFixtureList().first().setFilterData(w);
             b.setUserData(r);
@@ -128,6 +135,10 @@ public class PlayScreen extends ScreenAdapter {
     }
 
     private PerformanceCounter updateCounter = new PerformanceCounter( "Update:" );
+    private Color minColor = new Color(1,.5f,.5f, .25f);
+    private Color maxColor = new Color(1,.5f,.5f, .75f);
+
+    boolean fading = true;
     /**
      *
      * @param deltaTime
@@ -142,6 +153,18 @@ public class PlayScreen extends ScreenAdapter {
 
         updateCameraPosition();
 
+        Color c = houseLight.getColor();
+        if(fading ){
+            c.lerp(minColor, deltaTime* (MathUtils.random(2, 7)));
+            if(c.a <= 0.3f)
+                fading = false;
+        }
+        else{
+            c.lerp(maxColor, deltaTime * (MathUtils.random(2, 7)));
+            if(c.a >= .7f)
+                fading = true;
+        }
+        houseLight.setColor( c );
         //System.out.println( updateCounter );
     }
 
@@ -162,11 +185,11 @@ public class PlayScreen extends ScreenAdapter {
         engine.render(batch);
         batch.end();
 
-        flashLight.setDirection( player.getRotation() );
-        flashLight.setPosition( player.getPosition() );
-        playerLight.setPosition( player.getPosition() );
+        renderLighting();
 
-        physicsSystem.render( camera );
+        batch.begin();
+        engine.postLighting(batch);
+        batch.end();
 
         gunui.draw( batch );
         //System.out.println( drawCounter );
@@ -175,6 +198,13 @@ public class PlayScreen extends ScreenAdapter {
             debugRenderer.render(physicsSystem.getWorld(), camera.combined);
 
         //System.out.println( drawCounter );
+    }
+
+    private void renderLighting(){
+        flashLight.setDirection( player.getRotation() );
+        flashLight.setPosition( player.getPosition() );
+        playerLight.setPosition( player.getPosition() );
+        physicsSystem.render( camera );
     }
 
     private void updateCameraPosition() {
