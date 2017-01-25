@@ -18,6 +18,7 @@ public class Global {
 	public static final short BULLET_LIVE = 3;
 	public static final short BULLET_DEAD = 4;
 	public static final short WALL = 5;
+	public static final short AMMO = 6;
 
 
 

@@ -1,6 +1,8 @@
 package com.redtoorange.game.screens;
 
 import box2dLight.ConeLight;
+import box2dLight.Light;
+import box2dLight.PointLight;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
@@ -55,7 +57,8 @@ public class PlayScreen extends ScreenAdapter {
     private PhysicsSystem physicsSystem;
     private GunUI gunui;
 
-    private ConeLight testLight;
+    private ConeLight flashLight;
+    private PointLight playerLight;
 
     public PlayScreen(Core core) {
         this.core = core;
@@ -107,7 +110,11 @@ public class PlayScreen extends ScreenAdapter {
 
         engine.addEntity( player );
 
-        testLight = new ConeLight(physicsSystem.getRayHandler(), 10, new Color(1, 1, 1, 0.5f), 10f, playerSpawn.x, playerSpawn.y, 0, 30f);
+        playerLight = new PointLight(physicsSystem.getRayHandler(), 10, new Color( 1,1,1, .75f ), 1f, playerSpawn.x, playerSpawn.y);
+        flashLight = new ConeLight(physicsSystem.getRayHandler(), 10, new Color(1, 1, 1, .75f), 10f, playerSpawn.x, playerSpawn.y, 0, 30f);
+        Filter f = new Filter();
+        f.maskBits = Global.ENEMY;
+        Light.setGlobalContactFilter( f );
     }
 
     private void initWalls() {
@@ -155,8 +162,9 @@ public class PlayScreen extends ScreenAdapter {
         engine.render(batch);
         batch.end();
 
-        testLight.setDirection( player.getRotation() );
-        testLight.setPosition( player.getPosition() );
+        flashLight.setDirection( player.getRotation() );
+        flashLight.setPosition( player.getPosition() );
+        playerLight.setPosition( player.getPosition() );
 
         physicsSystem.render( camera );
 
