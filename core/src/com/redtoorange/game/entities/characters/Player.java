@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
+import com.redtoorange.game.components.input.InputComponent;
+import com.redtoorange.game.components.input.PlayerInputComponent;
 import com.redtoorange.game.components.physics.character.PlayerPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Engine;
@@ -30,8 +32,9 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 	private final OrthographicCamera camera;    //Reference to the main camera
 	private Inventory ammo = new Inventory( );
 	private Sprite crossHair;
-	private Vector3 mousePosition = new Vector3( );
-	private PlayerGunComponent gunComponent;
+//
+//	private PlayerGunComponent gunComponent;
+//	private PlayerInputComponent inputComponent;
 
 	public Player( Engine engine, OrthographicCamera camera, PlayScreen playScreen, PhysicsSystem physicsSystem, Vector2 spawnPoint ) {
 		super( spawnPoint, engine, physicsSystem );
@@ -39,12 +42,20 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 		this.camera = camera;
 		loadAssets( spawnPoint );
 
-		gunComponent = new PlayerGunComponent( physicsSystem, engine, this, playScreen );
-		physicsComponent = new PlayerPhysicsComponent( physicsSystem, this );
+		//addComponent( spriteComponent );
 
-		addComponent( physicsComponent );
-		addComponent( gunComponent );
-		addComponent( spriteComponent );
+		//inputComponent = new PlayerInputComponent( this, camera );
+		//addComponent( inputComponent );
+		addComponent( new PlayerInputComponent( this, camera ) );
+
+		//physicsComponent = new PlayerPhysicsComponent( physicsSystem, this );
+		//addComponent( physicsComponent );
+		addComponent( new PlayerPhysicsComponent( physicsSystem, this ) );
+
+		//gunComponent = new PlayerGunComponent( physicsSystem, engine, this, playScreen );
+		//addComponent( gunComponent );
+		addComponent( new PlayerGunComponent( physicsSystem, engine, this, playScreen ) );
+
 	}
 
 	protected void loadAssets( Vector2 spawnPoint ) {
@@ -55,7 +66,7 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 		sprite.setSize( 1f, 1f );
 		sprite.setOriginCenter( );
 
-		spriteComponent = new SpriteComponent( sprite, this );
+		addComponent( new SpriteComponent( sprite, this ) );
 
 		Texture cross = new Texture( "crosshair.png" );
 		crossHair = new Sprite( cross );
@@ -64,13 +75,10 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 	}
 
 	public void update( float deltaTime ) {
-		mousePosition = camera.unproject( new Vector3( Gdx.input.getX( ), Gdx.input.getY( ), 0f ) );
-		crossHair.setCenter( mousePosition.x, mousePosition.y );
-
-		processInput( );
-		rotatePlayerToMouseDirection( );
-
 		super.update( deltaTime );
+
+		PlayerInputComponent ic = getComponent(PlayerInputComponent.class);
+		crossHair.setCenter( ic.getMousePosition().x, ic.getMousePosition().y );
 	}
 
 	@Override
@@ -81,30 +89,6 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 	@Override
 	public void postLightingDraw( SpriteBatch batch ) {
 		crossHair.draw( batch );
-	}
-
-	protected void rotatePlayerToMouseDirection( ) {
-		setRotation( Global.lookAt( position, new Vector2( mousePosition.x, mousePosition.y ) ) );
-	}
-
-	protected void processInput( ) {
-		deltaInput.set( 0, 0 );
-
-		if ( Gdx.input.isKeyPressed( Input.Keys.ESCAPE ) )
-			Gdx.app.exit( );
-
-		if ( Gdx.input.isKeyPressed( Input.Keys.W ) )
-			deltaInput.y = 1;
-		if ( Gdx.input.isKeyPressed( Input.Keys.S ) )
-			deltaInput.y = -1;
-		if ( Gdx.input.isKeyPressed( Input.Keys.A ) )
-			deltaInput.x = -1;
-		if ( Gdx.input.isKeyPressed( Input.Keys.D ) )
-			deltaInput.x = 1;
-	}
-
-	public Vector3 getMousePosition( ) {
-		return mousePosition;
 	}
 
 	@Override

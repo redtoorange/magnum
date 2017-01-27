@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.redtoorange.game.Global;
+import com.redtoorange.game.components.input.PlayerInputComponent;
+import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Drawable;
 import com.redtoorange.game.engine.Engine;
 import com.redtoorange.game.engine.Updateable;
@@ -45,6 +47,9 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 	private boolean needsReload = false;
 	private PlayScreen playScreen;
 
+	private SpriteComponent sc;
+	private PlayerInputComponent in;
+
 	private GunSoundManager gsm = new GunSoundManager( );
 	private boolean reloading = false;
 
@@ -62,6 +67,8 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 		}
 
 		playScreen.getGunUI( ).swapCurrentImage( bulletTextures[ maxBulletsInGun ] );
+		sc = player.getComponent( SpriteComponent.class );
+		in= player.getComponent( PlayerInputComponent.class );
 	}
 
 	public void update( float deltaTime ) {
@@ -158,11 +165,11 @@ public class PlayerGunComponent extends Component implements Updateable, Drawabl
 		if ( bulletIndex == MAX_BULLETS )
 			bulletIndex = 0;
 
-		Vector2 bulletPosition = player.getSpriteComponent( ).getCenter( );
+		Vector2 bulletPosition = sc.getCenter( );
 		bulletPosition.add( new Vector2( 0.35f, -0.3f ).rotate( player.getRotation( ) ) );
 
-		Vector2 velocity = new Vector2( player.getMousePosition( ).x - bulletPosition.x,
-				player.getMousePosition( ).y - bulletPosition.y ).nor( );
+		Vector2 velocity = new Vector2( in.getMousePosition( ).x - bulletPosition.x,
+				in.getMousePosition( ).y - bulletPosition.y ).nor( );
 		velocity.scl( speed );
 
 		b.fire( bulletPosition, velocity, player.getRotation( ) );

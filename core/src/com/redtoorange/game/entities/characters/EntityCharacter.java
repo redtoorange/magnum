@@ -2,6 +2,7 @@ package com.redtoorange.game.entities.characters;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.redtoorange.game.components.input.InputComponent;
 import com.redtoorange.game.components.physics.PhysicsComponent;
 import com.redtoorange.game.components.physics.character.CharacterPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
@@ -12,9 +13,9 @@ import com.redtoorange.game.systems.PhysicsSystem;
 public abstract class EntityCharacter extends Entity {
 	protected CharacterPhysicsComponent physicsComponent = null;
 	protected SpriteComponent spriteComponent = null;
+	protected InputComponent inputComponent = null;
 
 	protected PhysicsSystem physicsSystem;
-	protected Vector2 deltaInput = new Vector2( );
 
 	protected int maxHealth = 10;
 	protected int health = maxHealth;
@@ -28,13 +29,13 @@ public abstract class EntityCharacter extends Entity {
 		return new Vector3( position.x, position.y, 0 );
 	}
 
-	public SpriteComponent getSpriteComponent( ) {
-		return spriteComponent;
-	}
-
-	public PhysicsComponent getPhysicsComponent( ) {
-		return physicsComponent;
-	}
+//	public SpriteComponent getSpriteComponent( ) {
+//		return spriteComponent;
+//	}
+//
+//	public PhysicsComponent getPhysicsComponent( ) {
+//		return physicsComponent;
+//	}
 
 	public float getRotation( ) {
 		return spriteComponent.getRotation( );
@@ -44,9 +45,9 @@ public abstract class EntityCharacter extends Entity {
 		spriteComponent.setRotation( rotation );
 	}
 
-	public Vector2 getDeltaInput( ) {
-		return deltaInput;
-	}
+//	public InputComponent getInputComponent( ) {
+//		return inputComponent;
+//	}
 
 	@Override
 	public void dispose( ) {

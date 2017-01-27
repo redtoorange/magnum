@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.redtoorange.game.Global;
+import com.redtoorange.game.components.input.EnemyInputComponent;
 import com.redtoorange.game.components.physics.character.EnemyPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
 import com.redtoorange.game.engine.Engine;
@@ -16,7 +17,6 @@ public class Enemy extends EntityCharacter {
 
 	public Enemy( PhysicsSystem physicsSystem, Engine engine, Vector2 spawnPosition, Player player ) {
 		this( physicsSystem, engine, spawnPosition );
-
 		this.player = player;
 	}
 
@@ -24,9 +24,12 @@ public class Enemy extends EntityCharacter {
 		super( spawnPosition, engine, physicsSystem );
 
 		spriteComponent = new SpriteComponent( loadEnemySprite( ), this );
-		physicsComponent = new EnemyPhysicsComponent( physicsSystem, this );
-
 		addComponent( spriteComponent );
+
+		inputComponent = new EnemyInputComponent( this );
+		addComponent( inputComponent );
+
+		physicsComponent = new EnemyPhysicsComponent( physicsSystem, this );
 		addComponent( physicsComponent );
 	}
 
@@ -46,23 +49,6 @@ public class Enemy extends EntityCharacter {
 	}
 
 	@Override
-	public void update( float deltaTime ) {
-		calculateDeltaInput( );
-		rotateToFacePlayer( );
-
-		super.update( deltaTime );
-	}
-
-	protected void rotateToFacePlayer( ) {
-		spriteComponent.setRotation( Global.lookAt( position, player.getPosition( ) ) );
-	}
-
-	protected void calculateDeltaInput( ) {
-		deltaInput.set( 1, 0 );
-		deltaInput.rotate( getRotation( ) );
-	}
-
-	@Override
 	public void takeDamage( int amount ) {
 		super.takeDamage( amount );
 
@@ -72,5 +58,9 @@ public class Enemy extends EntityCharacter {
 	@Override
 	protected void die( ) {
 		dispose( );
+	}
+
+	public Player getPlayer(){
+		return player;
 	}
 }
