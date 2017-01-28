@@ -63,4 +63,9 @@ public class Enemy extends EntityCharacter {
 	public Player getPlayer(){
 		return player;
 	}
+
+	@Override
+	public float getRotation( ) {
+		return ((SpriteComponent)getComponent( SpriteComponent.class )).getRotation();
+	}
 }

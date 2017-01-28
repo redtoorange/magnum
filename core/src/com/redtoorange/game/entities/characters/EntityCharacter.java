@@ -37,9 +37,7 @@ public abstract class EntityCharacter extends Entity {
 //		return physicsComponent;
 //	}
 
-	public float getRotation( ) {
-		return spriteComponent.getRotation( );
-	}
+	public abstract float getRotation( );
 
 	protected void setRotation( float rotation ) {
 		spriteComponent.setRotation( rotation );

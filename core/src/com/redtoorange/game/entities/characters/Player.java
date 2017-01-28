@@ -112,4 +112,9 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 	public Inventory getInventoy( ) {
 		return ammo;
 	}
+
+	@Override
+	public float getRotation( ) {
+		return ((SpriteComponent)getComponent( SpriteComponent.class )).getRotation();
+	}
 }
