@@ -52,8 +52,8 @@ public class Global {
 	 * Call to the OpenGL JNI to set the clear color and clear the screen.
 	 */
 	public static void clearScreen( ) {
-		Gdx.gl.glClearColor( 0, 0, 0, 1 );
-		Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT );
+		Gdx.gl20.glClearColor( 0, 0, 0, 1 );
+		Gdx.gl20.glClear( GL20.GL_COLOR_BUFFER_BIT );
 	}
 
 	/**

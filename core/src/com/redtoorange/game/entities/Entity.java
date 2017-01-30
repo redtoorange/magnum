@@ -51,12 +51,15 @@ public abstract class Entity implements Disposable {
 		T obj = null;
 
 		for ( Component c : components ) {
-			if ( classOfInterest.isInstance( c ) ) obj = ( T ) c;
-			if ( obj != null ) return obj;
+			if ( classOfInterest.isInstance( c ) )
+				obj = ( T ) c;
+			if ( obj != null )
+				return obj;
 		}
 
 		return obj;
 	}
+
 
 	protected void addComponent( Component c ) {
 		components.add( c );

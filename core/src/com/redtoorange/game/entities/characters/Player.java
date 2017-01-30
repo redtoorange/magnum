@@ -1,16 +1,11 @@
 package com.redtoorange.game.entities.characters;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.redtoorange.game.Global;
 import com.redtoorange.game.components.PlayerGunComponent;
-import com.redtoorange.game.components.input.InputComponent;
 import com.redtoorange.game.components.input.PlayerInputComponent;
 import com.redtoorange.game.components.physics.character.PlayerPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
@@ -33,7 +28,7 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 	private Inventory ammo = new Inventory( );
 	private Sprite crossHair;
 //
-//	private PlayerGunComponent gunComponent;
+	private PlayerGunComponent gunComponent;
 //	private PlayerInputComponent inputComponent;
 
 	public Player( Engine engine, OrthographicCamera camera, PlayScreen playScreen, PhysicsSystem physicsSystem, Vector2 spawnPoint ) {
@@ -44,15 +39,15 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 
 		//addComponent( spriteComponent );
 
-		//inputComponent = new PlayerInputComponent( this, camera );
+		inputComponent = new PlayerInputComponent( this, camera );
 		//addComponent( inputComponent );
 		addComponent( new PlayerInputComponent( this, camera ) );
 
-		//physicsComponent = new PlayerPhysicsComponent( physicsSystem, this );
+		physicsComponent = new PlayerPhysicsComponent( physicsSystem, this );
 		//addComponent( physicsComponent );
 		addComponent( new PlayerPhysicsComponent( physicsSystem, this ) );
 
-		//gunComponent = new PlayerGunComponent( physicsSystem, engine, this, playScreen );
+		gunComponent = new PlayerGunComponent( physicsSystem, engine, this, playScreen );
 		//addComponent( gunComponent );
 		addComponent( new PlayerGunComponent( physicsSystem, engine, this, playScreen ) );
 
@@ -115,6 +110,6 @@ public class Player extends EntityCharacter implements PostLightingDraw {
 
 	@Override
 	public float getRotation( ) {
-		return ((SpriteComponent)getComponent( SpriteComponent.class )).getRotation();
+		return spriteComponent.getRotation();
 	}
 }

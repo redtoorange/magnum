@@ -3,7 +3,6 @@ package com.redtoorange.game.entities.characters.enemies;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.redtoorange.game.Global;
 import com.redtoorange.game.components.input.EnemyInputComponent;
 import com.redtoorange.game.components.physics.character.EnemyPhysicsComponent;
 import com.redtoorange.game.components.rendering.SpriteComponent;
@@ -66,6 +65,6 @@ public class Enemy extends EntityCharacter {
 
 	@Override
 	public float getRotation( ) {
-		return ((SpriteComponent)getComponent( SpriteComponent.class )).getRotation();
+		return spriteComponent.getRotation();
 	}
 }

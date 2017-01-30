@@ -18,8 +18,8 @@ public class Core extends Game {
 
 	@Override
 	public void create( ) {
-		playScreen = new PlayScreen( this );
-		setScreen( playScreen );
+		//playScreen = new PlayScreen( this );
+		//setScreen( playScreen );
 	}
 
 	@Override
@@ -44,9 +44,9 @@ public class Core extends Game {
 		if ( Global.DEBUG )
 			logger.log( );
 
-		update( );
+		//update( );
 
-		draw( );
+		//draw( );
 	}
 
 	public void update( ) {
